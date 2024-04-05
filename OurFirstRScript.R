@@ -206,6 +206,7 @@ y %>%
   filter(trap_id > 65) %>% 
   arrange(trap_id)
 
+
 # summarizing data within groups
 names(y)
 y$age
