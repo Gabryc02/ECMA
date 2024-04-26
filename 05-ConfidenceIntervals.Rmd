@@ -3,6 +3,8 @@ title: "How to calculate confidence intervals"
 output:
   word_document: default
   html_notebook: default
+  html_document:
+    df_print: paged
 ---
 
 Consider our snow vole case study... We will calculate the confidence intervals for the mean of the weight of the individuals, for the foot length, and for different groups. 
@@ -65,6 +67,21 @@ Do it on your own:
 as.data.frame(CI(na.omit(dati$weight_g), ci=0.95)) -> CImean
 CImean
 ```
+```{r}
+dati2 <- na.omit(dati)
+names(dati2)
+group.CI(footlength_mm ~ sex,
+         data= dati2,
+         ci=0.95)
+intervalli <- group.CI(footlength_mm ~ sex,
+         data= dati2,
+         ci=0.95)
+intervalli
+ggplot(intervalli, aes(x=sex, y=footlength_mm.mean, colour=sex)) +
+    geom_errorbar(aes(ymin=footlength_mm.lower, ymax=footlength_mm.upper), width=.1) +
+    geom_line() +
+    geom_point()
+```
 
 
 
@@ -85,6 +102,30 @@ boot.ci(boot.data,
         conf = 0.95)
 ```
 
+
+```{r}
+library(tidyverse)
+dati2%>%
+  filter(sex =="F") -> datiF
+dati2%>%
+  filter(sex =="M") -> datiM
+
+dataset <- datiM
+
+boot.data <- boot(dataset$weight_g,
+                  function(x,i) mean(x[i]), 
+                  R=10000)
+
+boot.ci(boot.data,
+        conf = 0.95)
+```
+
+  ```
+
+
+```{r}
+
+
 The function generates different types of non-parametric confidence intervals. For routine use, it is recommended to use the BCa or percentile methods. The formulae on which the calculations are based can be found in Chapter 5 of Davison and Hinkley (1997). Davison, A.C. and Hinkley, D.V. (1997) Bootstrap Methods and Their Application, Chapter 5. Cambridge University Press.
 
 Do it on your own:
@@ -96,4 +137,3 @@ Do it on your own:
 
 * 'Calculating the Confidence interval for a mean using a formula' from Statistics Learning Center. (Dr. Nic). 2013. www.youtube.com/watch?v=s4SRdaTycaw
 * Davison, A.C. and Hinkley, D.V. (1997) Bootstrap Methods and Their Application, Chapter 5. Cambridge University Press.
-
