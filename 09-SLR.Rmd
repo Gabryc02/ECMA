@@ -21,6 +21,7 @@ summary(cars)
 R will calculate the linear regression line with the *lm* function.   
 We will store the results in an object called *cars.lm*.
 
+
 ```{r regression}
 
 cars.lm <- lm(dist ~ speed, data = cars)
@@ -30,6 +31,11 @@ coef(cars.lm)
 ```
 
 We visually inspect the data:
+abline funziona solo se prima fai firare plot, perchè è una funzione di secondo livello.
+I residuals sono gli errori rimasti fuori dall'analisi di regressione
+Coefficients=-17.57 indica l'intercetta, ovvero l'intersezione della retta con l'asse y.
+Speed è il coefficiente angolare. Si calcola il t-value per vedere se speed è significativamente diverso da 0, per vedere se la retta ha un'inclinazione.
+Pr(>|t|) deve essere minore di 0,05 perchè sarebbe il p-value e si riferisce alla significatività del t-test.
 
 ```{r regressionplot}
 

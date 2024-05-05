@@ -24,17 +24,19 @@ I provided you a dataset called *captures.csv*. The data provide information on 
 
 ```{r}
 # Read captures.csv (name it 'captures')
-
+captures <- read.csv("data/captures.csv", sep=";")
 
 # Check the class of captures
 ?class
+class(captures)
 
 # Check the dimensions of captures
 ?dim()
+dim(captures)
 
 # View the column names of captures
 ?names()
-
+names(captures)
 ```
 
 
@@ -52,9 +54,11 @@ You can use the *summary()* command to get a better feel for how your data are d
 
 ```{r}
 # Check the structure of captures
+str(captures)
 
 
 # View a summary of captures
+summary(captures)
 
 
 ```
@@ -87,10 +91,10 @@ For the moment, we will use the functions *hist()* and *plot()* to produce an hi
 
 
 # View the first 6 rows
-
+head(captures)
 
 # View the first 15 rows
-
+head(captures, n=15)
 
 # View the last 6 rows
 
@@ -229,7 +233,7 @@ captures %>%
 # select columns from weight_g to footlenght_mm, excluding reproductive status
 captures %>% 
   select(weight_g:footlength_mm) %>% 
-  select(-repr_status)
+ dplyr:: select(-repr_status)
 
 ```
 
@@ -248,6 +252,9 @@ captures %>%
 
 ```{r}
 # DO IT ON YOUR OWN - CALCULATE THE MEAN TAKING INTO ACCOUNT THE AGE CLASS
+captures%>%
+  group_by(age) %>%
+  summarise(mean(weight_g, na.rm=TRUE))
 
 ```
 

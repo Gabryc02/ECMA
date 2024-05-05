@@ -5,7 +5,7 @@ output:
     df_print: paged
 ---
 
-# Problem - dilemma of two graders
+# Problem - dilemma of two graders (in questo caso si tratta di due variabili corre)
 
 In order to promote fairness in grading, each application was graded twice by different graders. Based on the grades, can we see if there is a difference between the two graders? The data is
 

@@ -118,6 +118,7 @@ summary(mod.q)
 ```
 
 Perhaps the girth and height of the tree interact to influence its volume: investigate a model including an interaction term for the two explanatory variables.
+In questo caso seguente al variare dell'altezza ci può essere un influsso diverso del diametro sul volume. 
 
 ```{r trees-interaction}
 

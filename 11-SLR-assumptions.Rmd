@@ -51,7 +51,7 @@ plot(cars.lm)
 
 One of the strongest regression assumptions is the one regarding independence. Departures from the independence assumption are often exhibited by correlation (or autocorrelation) present in the residuals. There can be positive or negative correlation.   
 To check this assumption, we use the first plot and we watch out for any patterns or structure: the points should be randomly scattered on the plot.   
-We can also do a test for this:
+We can also do a test for this:   (test di Durbin-Watson)
 
 ```{r durbinwatson}
 

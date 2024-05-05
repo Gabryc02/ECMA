@@ -119,7 +119,7 @@ Test the hypothesis that the individual weights are significantly different from
 t.test(ind.w$individual.weight, mu = 30)
 ```
 
-
+ 
 ```{r gdl}
 length(na.omit(ind.w$individual.weight))
 ```
@@ -133,8 +133,8 @@ We must met 5 assumptions:
 * data are continuous
 * data are normally distributed
 * both samples are simple random samples from their respective populations
-* the variances of the two populations are equal
-* the two samples are independent
+* the variances of the two populations are equal 
+* the two samples are independent (non c'è un rapporto diretto tra le variabili dei due campioni)
 
 
 ```{r data-twosamples}

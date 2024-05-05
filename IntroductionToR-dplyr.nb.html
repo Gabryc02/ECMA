@@ -11,7 +11,7 @@
 
 
 
-<title>Simple Linear Regression - exercise</title>
+<title>Getting a feel for and manage your data</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1746,81 +1746,501 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Simple Linear Regression - exercise</h1>
+<h1 class="title toc-ignore">Getting a feel for and manage your
+data</h1>
 
 </div>
 
 
 <!-- rnb-text-begin -->
-<p>The following data comes from an experiment on caterpillars. The
-caterpillars were fed on experimental diets differing in their tannin
-content, and their growth was then measured:</p>
+<p>In this exercise, we first learn how to get a feel of our data, by
+looking at the structure of datasets, and then we’re going to focus on
+how to use the <code>dplyr</code> package, exploring functions for data
+management and transformation. These exercises are (partly) from <a href="https://www.datacamp.com/home">DataCamp</a> and partly inspired by
+<a href="https://r4ds.had.co.nz/transform.html">R for Data
+Science</a>.</p>
+<div id="have-a-look-at-the-structure-of-your-data" class="section level1">
+<h1>Have a look at the structure of your data</h1>
+<p>The first thing to do when you get your hands on a new dataset is to
+<strong>understand its structure</strong>. There are several ways to go
+about this in R, each of which may reveal different issues with your
+data that require attention.</p>
+<p>In this course, we are only concerned with data that can be expressed
+in table format (i.e. two dimensions, rows and columns). Tables in R
+often have the type data.frame. You can check the class of any object in
+R with the <em>class()</em> function.</p>
+<p>Once you know that you are dealing with tabular data, you may also
+want to get a quick feel for the contents of your data. Before printing
+the entire dataset to the console, it’s probably worth knowing how many
+rows and columns there are. The <em>dim()</em> command tells you
+this.</p>
+<div id="instructions" class="section level2">
+<h2>Instructions</h2>
+<p>I provided you a dataset called <em>captures.csv</em>. The data
+provide information on snow vole captures</p>
+<ul>
+<li>Check the class of captures</li>
+<li>Find the dimensions of captures</li>
+<li>Print the captures column names</li>
+</ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ3Jvd3RoID0gYygxMiwgMTAsIDgsIDExLCA2LCA3LCAyLCAzLjUsIDMuNSlcbnRhbm5pbiA9IDA6OFxuYGBgXG5gYGAifQ== -->
-<pre class="r"><code>```r
-growth = c(12, 10, 8, 11, 6, 7, 2, 3.5, 3.5)
-tannin = 0:8</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-We hypothesize that the higher the percentage of tannin in the diet, the more slowly the caterpillars grow.   
-Test this hypothesis through a regression analysis.
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG0ucmVzdWx0IDwtIGxtKGdyb3d0aCB+IHRhbm5pbilcblxuYGBgIn0= --&gt;
-
-```r
-lm.result &lt;- lm(growth ~ tannin)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xhc3MoY2FwdHVyZXMpXG5cbmBgYCJ9 -->
+<pre class="r"><code>class(captures)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3JlIGluIGV2YWwocHJlZHZhcnMsIGRhdGEsIGVudikgOiBvZ2dldHRvICdncm93dGgnIG5vbiB0cm92YXRvXG4ifQ== -->
-<pre><code>Errore in eval(predvars, data, env) : oggetto &#39;growth&#39; non trovato</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiZGF0YS5mcmFtZVwiXG4ifQ== -->
+<pre><code>[1] &quot;data.frame&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>A previous experiment, however, produced different results. In
-particular, the slope of the regression coefficient was -1.5. We can do
-a test to see if the slope we just estimated (-1.158) is statistically
-different from 1.5. In this case the null hypothesis is that the slope
-is -1.5, vs. the alternative hypothesis that the slope is more than
--1.5.</p>
+</div>
+</div>
+<div id="viewing-the-structure-of-your-data" class="section level1">
+<h1>Viewing the structure of your data</h1>
+<p>Since <em>captures</em> doesn’t have a huge number of columns, you
+can view a quick snapshot of your data using the <em>str()</em> (for
+structure) command. In addition to the class and dimensions of your
+entire dataset, <em>str()</em> will tell you the class of each variable
+and give you a preview of its contents.</p>
+<p>You can use the <em>summary()</em> command to get a better feel for
+how your data are distributed, which may reveal unusual or extreme
+values, unexpected missing data, etc. For numeric variables, this means
+looking at means, quartiles (including the median), and extreme values.
+For character or factor variables, you may be curious about the number
+of times each value appears in the data (i.e. counts), which
+<em>summary()</em> also reveals.</p>
+<div id="instructions-1" class="section level2">
+<h2>Instructions</h2>
+<ul>
+<li>View the structure of <em>captures</em> using the traditional
+method</li>
+<li>Look at a <em>summary()</em> of <em>captures</em></li>
+</ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudCA9ICgtMS4xNTgzIC0gKC0xLjUpKS8wLjIyMzZcbnB0KHQsIDcsIGxvd2VyLnRhaWwgPSBGQUxTRSlcbmBgYCJ9 -->
-<pre class="r"><code>t = (-1.1583 - (-1.5))/0.2236
-pt(t, 7, lower.tail = FALSE)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBWaWV3IGEgc3VtbWFyeSBvZiBjYXB0dXJlc1xuc3VtbWFyeShjYXB0dXJlcylcblxuYGBgIn0= -->
+<pre class="r"><code># View a summary of captures
+summary(captures)
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMDg1MTU2MThcbiJ9 -->
-<pre><code>[1] 0.08515618</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgYW5pbWFsX2lkICAgICAgIGNhcHR1cmVfaWQgICAgICBkYXRhICAgICAgICAgICAgICBkYXduICAgICAgICAgICAgb2NjYXNpb24gICAgXG4gTWluLiAgIDogMS4wMCAgIE1pbi4gICA6ICAxICAgTGVuZ3RoOjEzMyAgICAgICAgIE1vZGUgOmxvZ2ljYWwgICBNaW4uICAgOiAxLjAwICBcbiAxc3QgUXUuOiA2LjAwICAgMXN0IFF1LjogMzQgICBDbGFzcyA6Y2hhcmFjdGVyICAgRkFMU0U6NTMgICAgICAgIDFzdCBRdS46IDYuMDAgIFxuIE1lZGlhbiA6MTEuMDAgICBNZWRpYW4gOiA2NyAgIE1vZGUgIDpjaGFyYWN0ZXIgICBUUlVFIDo4MCAgICAgICAgTWVkaWFuIDogOS4wMCAgXG4gTWVhbiAgIDoyMS4zNSAgIE1lYW4gICA6IDY3ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNZWFuICAgOjEwLjQ2ICBcbiAzcmQgUXUuOjM2LjAwICAgM3JkIFF1LjoxMDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDNyZCBRdS46MTUuMDAgIFxuIE1heC4gICA6OTkuMDAgICBNYXguICAgOjEzMyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWF4LiAgIDoyMy4wMCAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICB0cmFwX2lkICAgICAgICAgICBjaGlwICAgICAgICAgIHJlY2FwdHVyZSAgICAgICAgICAgZnVybWFyayAgICAgICAgICAgICB3ZWlnaHRfZyAgICBcbiBNaW4uICAgOiAyLjAwICAgTWluLiAgIDoxMzEwMzYzICAgTGVuZ3RoOjEzMyAgICAgICAgIExlbmd0aDoxMzMgICAgICAgICBNaW4uICAgOjE0LjAwICBcbiAxc3QgUXUuOjE4LjAwICAgMXN0IFF1LjoxMzEzMDYyICAgQ2xhc3MgOmNoYXJhY3RlciAgIENsYXNzIDpjaGFyYWN0ZXIgICAxc3QgUXUuOjIyLjUwICBcbiBNZWRpYW4gOjM0LjAwICAgTWVkaWFuIDoxMzE0MTk1ICAgTW9kZSAgOmNoYXJhY3RlciAgIE1vZGUgIDpjaGFyYWN0ZXIgICBNZWRpYW4gOjI5LjAwICBcbiBNZWFuICAgOjM1LjczICAgTWVhbiAgIDoxMzE0MTYxICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNZWFuICAgOjI5LjgzICBcbiAzcmQgUXUuOjU1LjAwICAgM3JkIFF1LjoxMzE0Nzk3ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzcmQgUXUuOjM3LjAwICBcbiBNYXguICAgOjc0LjAwICAgTWF4LiAgIDoxMzE3MDE4ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNYXguICAgOjQ2LjAwICBcbiAgICAgICAgICAgICAgICAgTkEncyAgIDo1OSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOQSdzICAgOjE0ICAgICBcbiAgICAgc2V4ICAgICAgICAgICAgICAgIGFnZSAgICAgICAgICAgIHJlcHJfc3RhdHVzICAgICAgICBmb290bGVuZ3RoX21tICAgICAgeWVhciAgICAgXG4gTGVuZ3RoOjEzMyAgICAgICAgIExlbmd0aDoxMzMgICAgICAgICBMZW5ndGg6MTMzICAgICAgICAgTWluLiAgIDoxNiAgICBNaW4uICAgOjIwMTUgIFxuIENsYXNzIDpjaGFyYWN0ZXIgICBDbGFzcyA6Y2hhcmFjdGVyICAgQ2xhc3MgOmNoYXJhY3RlciAgIDFzdCBRdS46MTggICAgMXN0IFF1LjoyMDE1ICBcbiBNb2RlICA6Y2hhcmFjdGVyICAgTW9kZSAgOmNoYXJhY3RlciAgIE1vZGUgIDpjaGFyYWN0ZXIgICBNZWRpYW4gOjE4ICAgIE1lZGlhbiA6MjAxNSAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWVhbiAgIDoxOSAgICBNZWFuICAgOjIwMTUgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDNyZCBRdS46MTkgICAgM3JkIFF1LjoyMDE1ICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNYXguICAgOjc4ICAgIE1heC4gICA6MjAxNSAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTkEncyAgIDoxNiAgICAgICAgICAgICAgICAgIFxuICAgICBtb250aCAgICAgICAgICAgRE9ZICAgICAgICAgIHNlc3Npb24gICAgICAgICAgICAgbm90ZXMgICAgICAgICAgXG4gTWluLiAgIDo3LjAwICAgTWluLiAgIDoxOTQuMCAgIExlbmd0aDoxMzMgICAgICAgICBMZW5ndGg6MTMzICAgICAgICBcbiAxc3QgUXUuOjcuMDAgICAxc3QgUXUuOjIwMi4wICAgQ2xhc3MgOmNoYXJhY3RlciAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1lZGlhbiA6OC4wMCAgIE1lZGlhbiA6MjQwLjAgICBNb2RlICA6Y2hhcmFjdGVyICAgTW9kZSAgOmNoYXJhY3RlciAgXG4gTWVhbiAgIDo3Ljg1ICAgTWVhbiAgIDoyMjcuOCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAzcmQgUXUuOjguMDAgICAzcmQgUXUuOjI0Mi4wICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIE1heC4gICA6OS4wMCAgIE1heC4gICA6MjQ5LjAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiJ9 -->
+<pre><code>   animal_id       capture_id      data              dawn            occasion    
+ Min.   : 1.00   Min.   :  1   Length:133         Mode :logical   Min.   : 1.00  
+ 1st Qu.: 6.00   1st Qu.: 34   Class :character   FALSE:53        1st Qu.: 6.00  
+ Median :11.00   Median : 67   Mode  :character   TRUE :80        Median : 9.00  
+ Mean   :21.35   Mean   : 67                                      Mean   :10.46  
+ 3rd Qu.:36.00   3rd Qu.:100                                      3rd Qu.:15.00  
+ Max.   :99.00   Max.   :133                                      Max.   :23.00  
+                                                                                 
+    trap_id           chip          recapture           furmark             weight_g    
+ Min.   : 2.00   Min.   :1310363   Length:133         Length:133         Min.   :14.00  
+ 1st Qu.:18.00   1st Qu.:1313062   Class :character   Class :character   1st Qu.:22.50  
+ Median :34.00   Median :1314195   Mode  :character   Mode  :character   Median :29.00  
+ Mean   :35.73   Mean   :1314161                                         Mean   :29.83  
+ 3rd Qu.:55.00   3rd Qu.:1314797                                         3rd Qu.:37.00  
+ Max.   :74.00   Max.   :1317018                                         Max.   :46.00  
+                 NA&#39;s   :59                                              NA&#39;s   :14     
+     sex                age            repr_status        footlength_mm      year     
+ Length:133         Length:133         Length:133         Min.   :16    Min.   :2015  
+ Class :character   Class :character   Class :character   1st Qu.:18    1st Qu.:2015  
+ Mode  :character   Mode  :character   Mode  :character   Median :18    Median :2015  
+                                                          Mean   :19    Mean   :2015  
+                                                          3rd Qu.:19    3rd Qu.:2015  
+                                                          Max.   :78    Max.   :2015  
+                                                          NA&#39;s   :16                  
+     month           DOY          session             notes          
+ Min.   :7.00   Min.   :194.0   Length:133         Length:133        
+ 1st Qu.:7.00   1st Qu.:202.0   Class :character   Class :character  
+ Median :8.00   Median :240.0   Mode  :character   Mode  :character  
+ Mean   :7.85   Mean   :227.8                                        
+ 3rd Qu.:8.00   3rd Qu.:242.0                                        
+ Max.   :9.00   Max.   :249.0                                        
+                                                                     </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+</div>
+<div id="looking-at-your-data" class="section level1">
+<h1>Looking at your data</h1>
+<p>You can look at all the summaries you want, but at the end of the
+day, there is no substitute for looking at your data – either in raw
+table form or by plotting it.</p>
+<p>The most basic way to look at your data in R is by printing it to the
+console. As you may know from experience, the <em>print()</em> command
+is not even necessary; you can just type the name of the object. The
+downside to this option is that R will attempt to print the entire
+dataset, which can be a nuisance if the dataset is too large.</p>
+<p>One way around this is to use the <em>head()</em> and <em>tail()</em>
+commands, which only display the first and last 6 rows of data,
+respectively. You can view more (or fewer) rows by providing as a second
+argument to the function the number of rows you wish to view. These
+functions provide a useful method for quickly getting a sense of your
+data without overly cluttering the console.</p>
+<p>Finally, one of the best ways to understand data is to plot them. For
+the moment, we will use the functions <em>hist()</em> and
+<em>plot()</em> to produce an histogram of one variable in the dataset,
+and to plot one variable against another, respectively.</p>
+<div id="instructions-2" class="section level2">
+<h2>Instructions</h2>
+<ul>
+<li>Print the full dataset to the console (you don’t need
+<em>print()</em> to do this)</li>
+<li>View the first 6 rows of captures</li>
+<li>View the first 15 rows of captures</li>
+<li>View the last 6 rows of captures</li>
+<li>View the last 10 rows of captures</li>
+<li>Produce an histogram of the weight of the animals
+(<em>weight_g</em>)</li>
+<li>Plot <em>capture_id</em> (an identification number for the capture
+events) against the day of the year (<em>DOY</em>)</li>
+</ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uZmludChsbS5yZXN1bHQpXG5gYGAifQ== -->
-<pre class="r"><code>confint(lm.result)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3JlOiBvZ2dldHRvICdsbS5yZXN1bHQnIG5vbiB0cm92YXRvXG4ifQ== -->
-<pre><code>Errore: oggetto &#39;lm.result&#39; non trovato</code></pre>
-<!-- rnb-output-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MTUsIm5jb2wiOjE5LCJzdW1tYXJ5Ijp7IkRlc2NyaXB0aW9uIjpbImRmIFsxNSDDlyAxOV0iXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCc1ZXVzI4U1FSUWVsbHVoRjdDUTZDTWFveVlLdmFudGl3OUlxWklJTkpRMjlZbU1zSVZObDkzTjdtRHJXMytIL2h1anhuL2hQMms5QTNOZ2RoYmFXbXNrK1RMZm5OdWNPZWNzdTQzdHc0M2tZWklRRWlhUmNKaUVvMEJKZEwrNWs5OGlKS0xCSmtRaUpNSFhVekRLQU9GWUJLU0dTa0tXeEJvYVJpRkVFNXpyMDRBSTRBNWdXZmlpWG82aENWOXV5MU9JQWVLQU9RQS9uR2M0RDFnUWZrdFMvSlJJTUxuMmZHVjFjMlY5ZGUzRldQTHlHcExOZnliWnVoM0ordW9mU1ViVjR0VWhVbWRra0V0MENMazdFWUdZaExqVUlSa0xFakRHWGNDbTZINUc3TG4rTmVDVmtKVUFUd0U1TVExSlg0eHM0dEVaenhqV0NiLzNHZmx3bnpuL0F2dlVlQy8weXBTRWFnSFNDSkJMYklLcTZ4RHBDRXdIQnZzQ2ZqTlg0YkNEcER6TFlodEpTZEdFaXl1cXlCY0YyOFBML2dTUUJ6d0RQT1N5Y1JsSER5N1gzd2M4RnZvSHd0WlgybW9nNmVwc2xXUnoxZFdubUU3VCtISXAzaEo1YzBOM0paM2dqQVdJVnB1bTgxOTRpczFFeEpsU0gxK2dZYjlGVDdNU2xnV3lVci94VWMxSXN1eGtadUsvYm83eDNNWC9BaGpqSytDYndQY3ArS0hncHdSZmd5ci9tZmpUSVZlc3k5WEszbjZqMkt6blN2VmE3cUJjYTlZVmkwU3pYTjJ0TjRydnlyTUVhc3gwdFZKcTFFdHZLN3U1L2IxU0pSQXh1UG8vRUtJVzdldWV1RWdHVDZXVzBhZG15K2pnbTZwTkhUWnc5WWtrMHFHTVR2aUpKZmljM1c1VHo3QnhIMmN1ZFNTM2RzOXc4QlJYRjJIUjltamc5cWw3aktGT2RLUGJZNjB1L2pONitpbFMya1duZVZkMzNKYkhLQnQ0UXJSNFpOdk0xSzB1NjdYNmZUejVrMDVkdkhUZnRsZ1BZMjNYMzJNQ251NUp1VWN0bS9IYStBcVdjTzJUQWhhTkQ3UjJOaXByU3ExczI2UWVWaGFGU1Y2MndwRUwvckE3VjF6aXRzUGdlSERTK0dNY1U1eERyaUpJRHl5ZVNTZmY3ZzJzNC96R2xxSVBPMWFYak43SzhoY0NmdWNoejR6UzBDNkVlMHk0eDZDRWhvV0ZqcHIwZzI1aTVJNytVZEFsS01pd0hnWEhOU3lHRndXcFYyQTJvK1o0aG13VEpjT3JrL1BmWUZwMTJja0tBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["animal_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["capture_id"],"name":[2],"type":["int"],"align":["right"]},{"label":["data"],"name":[3],"type":["chr"],"align":["left"]},{"label":["dawn"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["occasion"],"name":[5],"type":["int"],"align":["right"]},{"label":["trap_id"],"name":[6],"type":["int"],"align":["right"]},{"label":["chip"],"name":[7],"type":["int"],"align":["right"]},{"label":["recapture"],"name":[8],"type":["chr"],"align":["left"]},{"label":["furmark"],"name":[9],"type":["chr"],"align":["left"]},{"label":["weight_g"],"name":[10],"type":["int"],"align":["right"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["age"],"name":[12],"type":["chr"],"align":["left"]},{"label":["repr_status"],"name":[13],"type":["chr"],"align":["left"]},{"label":["footlength_mm"],"name":[14],"type":["int"],"align":["right"]},{"label":["year"],"name":[15],"type":["int"],"align":["right"]},{"label":["month"],"name":[16],"type":["int"],"align":["right"]},{"label":["DOY"],"name":[17],"type":["int"],"align":["right"]},{"label":["session"],"name":[18],"type":["chr"],"align":["left"]},{"label":["notes"],"name":[19],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"1","3":"14/07/2015","4":"FALSE","5":"1","6":"23","7":"1313062","8":"N","9":"NA","10":"43","11":"M","12":"A","13":"R","14":"NA","15":"2015","16":"7","17":"194","18":"I","19":"","_rn_":"1"},{"1":"14","2":"2","3":"16/07/2015","4":"TRUE","5":"4","6":"55","7":"NA","8":"N","9":"NA","10":"40","11":"F","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":"","_rn_":"2"},{"1":"1","2":"3","3":"16/07/2015","4":"TRUE","5":"4","6":"19","7":"1313062","8":"R","9":"NA","10":"45","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":"","_rn_":"3"},{"1":"1","2":"4","3":"17/07/2015","4":"TRUE","5":"6","6":"19","7":"1313062","8":"R","9":"NA","10":"44","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"197","18":"I","19":"","_rn_":"4"},{"1":"3","2":"5","3":"17/07/2015","4":"TRUE","5":"6","6":"23","7":"NA","8":"N","9":"F","10":"36","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"MISURATO CON VENTO","_rn_":"5"},{"1":"2","2":"6","3":"17/07/2015","4":"TRUE","5":"6","6":"12","7":"1317018","8":"N","9":"E","10":"43","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"","_rn_":"6"},{"1":"1","2":"7","3":"17/07/2015","4":"FALSE","5":"7","6":"66","7":"1313062","8":"R","9":"NA","10":"NA","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"197","18":"I","19":"TEMPORALE","_rn_":"7"},{"1":"15","2":"8","3":"17/07/2015","4":"FALSE","5":"7","6":"61","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"7","17":"197","18":"I","19":"TEMPORALE","_rn_":"8"},{"1":"16","2":"9","3":"18/07/2015","4":"TRUE","5":"8","6":"19","7":"NA","8":"N","9":"D","10":"18","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"7","17":"198","18":"I","19":"","_rn_":"9"},{"1":"4","2":"10","3":"18/07/2015","4":"TRUE","5":"8","6":"67","7":"1310363","8":"N","9":"C","10":"40","11":"F","12":"A","13":"R","14":"19","15":"2015","16":"7","17":"198","18":"I","19":"","_rn_":"10"},{"1":"17","2":"11","3":"18/07/2015","4":"TRUE","5":"8","6":"43","7":"1313039","8":"N","9":"NA","10":"33","11":"F","12":"A","13":"NR","14":"19","15":"2015","16":"7","17":"198","18":"I","19":"MICROCHIP USCITO","_rn_":"11"},{"1":"18","2":"12","3":"18/07/2015","4":"TRUE","5":"8","6":"32","7":"NA","8":"N","9":"A/C","10":"39","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"7","17":"198","18":"I","19":"","_rn_":"12"},{"1":"19","2":"13","3":"20/07/2015","4":"TRUE","5":"12","6":"2","7":"NA","8":"N","9":"NA","10":"36","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"7","17":"200","18":"I","19":"","_rn_":"13"},{"1":"2","2":"14","3":"20/07/2015","4":"TRUE","5":"12","6":"10","7":"1317018","8":"R","9":"E","10":"34","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"200","18":"I","19":"","_rn_":"14"},{"1":"1","2":"15","3":"20/07/2015","4":"TRUE","5":"12","6":"12","7":"1313062","8":"R","9":"NA","10":"44","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"200","18":"I","19":"","_rn_":"15"}],"options":{"columns":{"min":{},"max":[10],"total":[19]},"rows":{"min":[10],"max":[10],"total":[15]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+</div>
+<div id="data-manipulation---the-four-fundamental-verbs" class="section level1">
+<h1>Data manipulation - the four fundamental verbs</h1>
+<p>Data manipulation includes variable-by-variable transformation
+(e.g. log, or sqrt), as well as aggregation, filtering and
+reordering.</p>
+<p>For data manipulation, we can use function from the <em>base</em>
+package, but here we rather focus on the functions from the additional
+<em>dplyr</em> package.</p>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbnN0YWxsLnBhY2thZ2VzKFwiZHBseXJcIikgIyBydW4gdGhpcyBsaW5lIG9ubHkgaWYgdGhlIHBhY2thZ2UgaXMgbm90IHlldCBpbnN0YWxsZWRcbmxpYnJhcnkoZHBseXIpICMgbG9hZCB0aGUgcGFja2FnZVxuYGBgIn0= -->
+<pre class="r"><code># install.packages(&quot;dplyr&quot;) # run this line only if the package is not yet installed
+library(dplyr) # load the package</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="transform" class="section level2">
+<h2>Transform</h2>
+<p>To transform means adding or modifying variables. These modifications
+can involve either a single variable (e.g. log-transformation), or
+multiple variables (es. computing density from weight and volume). The
+function <code>mutate()</code> in package <code>dplyr</code> can be used
+to calculate new variables and to add them at the end of your
+dataset.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBUcmFuc2Zvcm0gdGhlIHdlaWdodCBvZiB0aGUgYW5pbWFscyB1c2luZyB0aGUgZnVuY3Rpb24gbG9nXG5sb2coY2FwdHVyZXMkd2VpZ2h0X2cpXG5gYGAifQ== -->
+<pre class="r"><code># Transform the weight of the animals using the function log
+log(captures$weight_g)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gMy43NjEyMDAgMy42ODg4NzkgMy44MDY2NjIgMy43ODQxOTAgMy41ODM1MTkgMy43NjEyMDAgICAgICAgTkEgICAgICAgTkEgMi44OTAzNzIgMy42ODg4NzlcbiBbMTFdIDMuNDk2NTA4IDMuNjYzNTYyIDMuNTgzNTE5IDMuNTI2MzYxIDMuNzg0MTkwIDIuNzcyNTg5IDIuNjM5MDU3IDMuODI4NjQxIDMuODI4NjQxIDIuODkwMzcyXG4gWzIxXSAzLjYzNzU4NiAzLjYxMDkxOCAzLjA5MTA0MiAyLjgzMzIxMyAgICAgICBOQSAgICAgICBOQSAgICAgICBOQSAgICAgICBOQSAzLjQzMzk4NyAzLjQ5NjUwOFxuIFszMV0gMy43Mzc2NzAgMi44OTAzNzIgMy44MDY2NjIgMi45NDQ0MzkgMy40NjU3MzYgMy43NjEyMDAgMi44OTAzNzIgMy41ODM1MTkgMy43MTM1NzIgMy42MTA5MThcbiBbNDFdIDMuNjM3NTg2IDMuODI4NjQxIDIuODkwMzcyIDMuNTgzNTE5IDIuODkwMzcyIDIuODkwMzcyIDMuNjM3NTg2IDMuNTU1MzQ4IDMuNTU1MzQ4IDMuNTU1MzQ4XG4gWzUxXSAzLjY2MzU2MiAzLjU1NTM0OCAzLjIxODg3NiAzLjUyNjM2MSAyLjg5MDM3MiAzLjYxMDkxOCAzLjQ5NjUwOCAzLjQzMzk4NyAzLjYzNzU4NiAgICAgICBOQVxuIFs2MV0gMy4yNTgwOTcgMy4wNDQ1MjIgMy41NTUzNDggMy40MDExOTcgMy42MTA5MTggMy40NjU3MzYgMy4zNjcyOTYgMy42ODg4NzkgMi44OTAzNzIgMy4yNTgwOTdcbiBbNzFdIDMuMjk1ODM3IDMuMjE4ODc2IDMuNTU1MzQ4IDMuMDkxMDQyIDMuMzMyMjA1IDMuNDAxMTk3IDMuNTU1MzQ4IDIuOTQ0NDM5IDMuMzY3Mjk2ICAgICAgIE5BXG4gWzgxXSAzLjA0NDUyMiAzLjYzNzU4NiAzLjIxODg3NiAzLjMzMjIwNSAzLjYzNzU4NiAzLjQwMTE5NyAzLjQzMzk4NyAzLjEzNTQ5NCAyLjk5NTczMiAzLjU1NTM0OFxuIFs5MV0gMy42Mzc1ODYgMy4zMzIyMDUgMy4xNzgwNTQgICAgICAgTkEgMy4yOTU4MzcgMy42Mzc1ODYgMy4wNDQ1MjIgMi44OTAzNzIgMy42MTA5MTggMy4xMzU0OTRcblsxMDFdIDIuOTk1NzMyIDIuOTQ0NDM5ICAgICAgIE5BICAgICAgIE5BIDMuMjU4MDk3ICAgICAgIE5BICAgICAgIE5BIDMuMjE4ODc2IDMuMjk1ODM3IDIuOTk1NzMyXG5bMTExXSAzLjA5MTA0MiAzLjU4MzUxOSAgICAgICBOQSAzLjI5NTgzNyAzLjMzMjIwNSAzLjIxODg3NiAzLjI5NTgzNyAyLjg5MDM3MiAyLjgzMzIxMyAzLjI5NTgzN1xuWzEyMV0gMy4zNjcyOTYgMy42MTA5MTggMy4xMzU0OTQgMi44OTAzNzIgMy42Mzc1ODYgMy4yMTg4NzYgMy4zNjcyOTYgMi45NDQ0MzkgMy4zNjcyOTYgMy4yMTg4NzZcblsxMzFdIDIuOTQ0NDM5IDMuNDAxMTk3IDMuMjk1ODM3XG4ifQ== -->
+<pre><code>  [1] 3.761200 3.688879 3.806662 3.784190 3.583519 3.761200       NA       NA 2.890372 3.688879
+ [11] 3.496508 3.663562 3.583519 3.526361 3.784190 2.772589 2.639057 3.828641 3.828641 2.890372
+ [21] 3.637586 3.610918 3.091042 2.833213       NA       NA       NA       NA 3.433987 3.496508
+ [31] 3.737670 2.890372 3.806662 2.944439 3.465736 3.761200 2.890372 3.583519 3.713572 3.610918
+ [41] 3.637586 3.828641 2.890372 3.583519 2.890372 2.890372 3.637586 3.555348 3.555348 3.555348
+ [51] 3.663562 3.555348 3.218876 3.526361 2.890372 3.610918 3.496508 3.433987 3.637586       NA
+ [61] 3.258097 3.044522 3.555348 3.401197 3.610918 3.465736 3.367296 3.688879 2.890372 3.258097
+ [71] 3.295837 3.218876 3.555348 3.091042 3.332205 3.401197 3.555348 2.944439 3.367296       NA
+ [81] 3.044522 3.637586 3.218876 3.332205 3.637586 3.401197 3.433987 3.135494 2.995732 3.555348
+ [91] 3.637586 3.332205 3.178054       NA 3.295837 3.637586 3.044522 2.890372 3.610918 3.135494
+[101] 2.995732 2.944439       NA       NA 3.258097       NA       NA 3.218876 3.295837 2.995732
+[111] 3.091042 3.583519       NA 3.295837 3.332205 3.218876 3.295837 2.890372 2.833213 3.295837
+[121] 3.367296 3.610918 3.135494 2.890372 3.637586 3.218876 3.367296 2.944439 3.367296 3.218876
+[131] 2.944439 3.401197 3.295837</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaXZpZGUgd2VpZ2h0IGJ5IHRoZSBmb290IGxlbmd0aCBhbmQgc2F2ZSB0aGUgbmV3IHZhcmlhYmxlIGFzIHdmcmF0aW9cbndmcmF0aW8gPC0gY2FwdHVyZXMkd2VpZ2h0X2cvY2FwdHVyZXMkZm9vdGxlbmd0aF9tbVxuY2FwdHVyZXMkd2VpZ2h0X2cvY2FwdHVyZXMkZm9vdGxlbmd0aF9tbSAtPiB3ZnJhdGlvXG5cbiMgYWRkIHRoZSBjb2x1bW4gd2ZyYXRpbyB0byB0aGUgY2FwdHVyZXMgZGF0YSBmcmFtZSwgY3JlYXRpbmcgYSBuZXcgZGF0YSBmcmFtZSBjYWxsZWQgY2FwdHVyZXMubmV3XG5jYXB0dXJlcy5uZXcgPC0gY2JpbmQoY2FwdHVyZXMsIHdmcmF0aW8pICMgdXNpbmcgUiBiYXNlIGZ1bmN0aW9uIGBjYmluZGBcbmNhcHR1cmVzICU+JSBcbiAgbXV0YXRlKHdmcmF0aW8gPSB3ZWlnaHRfZy9mb290bGVuZ3RoX21tKSAtPiBjYXB0dXJlcy5uZXdcbmhlYWQoY2FwdHVyZXMubmV3KVxuYGBgIn0= -->
+<pre class="r"><code># Divide weight by the foot length and save the new variable as wfratio
+wfratio &lt;- captures$weight_g/captures$footlength_mm
+captures$weight_g/captures$footlength_mm -&gt; wfratio
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNpbXBsZSBMaW5lYXIgUmVncmVzc2lvbiAtIGV4ZXJjaXNlIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KVGhlIGZvbGxvd2luZyBkYXRhIGNvbWVzIGZyb20gYW4gZXhwZXJpbWVudCBvbiBjYXRlcnBpbGxhcnMuIFRoZSBjYXRlcnBpbGxhcnMgd2VyZSBmZWQgb24gZXhwZXJpbWVudGFsIGRpZXRzIGRpZmZlcmluZyBpbiB0aGVpciB0YW5uaW4gY29udGVudCwgYW5kIHRoZWlyIGdyb3d0aCB3YXMgdGhlbiBtZWFzdXJlZDoNCg0KYGBge3J9DQpncm93dGggPSBjKDEyLCAxMCwgOCwgMTEsIDYsIDcsIDIsIDMuNSwgMy41KQ0KdGFubmluID0gMDo4DQpgYGANCg0KV2UgaHlwb3RoZXNpemUgdGhhdCB0aGUgaGlnaGVyIHRoZSBwZXJjZW50YWdlIG9mIHRhbm5pbiBpbiB0aGUgZGlldCwgdGhlIG1vcmUgc2xvd2x5IHRoZSBjYXRlcnBpbGxhcnMgZ3Jvdy4gICANClRlc3QgdGhpcyBoeXBvdGhlc2lzIHRocm91Z2ggYSByZWdyZXNzaW9uIGFuYWx5c2lzLg0KDQpgYGB7cn0NCmxtLnJlc3VsdCA8LSBsbShncm93dGggfiB0YW5uaW4pDQpzdW1tYXJ5KGxtLnJlc3VsdCkNCnBsb3QoZ3Jvd3RoIH4gdGFubmluKQ0KYWJsaW5lKGNvZWYobG0ucmVzdWx0KSwgbHdkPTIsIGNvbD0icmVkIikNCmBgYA0KDQoNCkEgcHJldmlvdXMgZXhwZXJpbWVudCwgaG93ZXZlciwgcHJvZHVjZWQgZGlmZmVyZW50IHJlc3VsdHMuIEluIHBhcnRpY3VsYXIsIHRoZSBzbG9wZSBvZiB0aGUgcmVncmVzc2lvbiBjb2VmZmljaWVudCB3YXMgLTEuNS4gV2UgY2FuIGRvIGEgdGVzdCB0byBzZWUgaWYgdGhlIHNsb3BlIHdlIGp1c3QgZXN0aW1hdGVkICgtMS4xNTgpIGlzIHN0YXRpc3RpY2FsbHkgZGlmZmVyZW50IGZyb20gMS41LiBJbiB0aGlzIGNhc2UgdGhlIG51bGwgaHlwb3RoZXNpcyBpcyB0aGF0IHRoZSBzbG9wZSBpcyAtMS41LCB2cy4gdGhlIGFsdGVybmF0aXZlIGh5cG90aGVzaXMgdGhhdCB0aGUgc2xvcGUgaXMgbW9yZSB0aGFuIC0xLjUuDQoNCmBgYHtyfQ0KdCA9ICgtMS4xNTgzIC0gKC0xLjUpKS8wLjIyMzYNCnB0KHQsIDcsIGxvd2VyLnRhaWwgPSBGQUxTRSkNCmBgYA0KDQoNCmBgYHtyfQ0KY29uZmludChsbS5yZXN1bHQpDQpgYGANCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQo=</div>
+# add the column wfratio to the captures data frame, creating a new data frame called captures.new
+captures.new &lt;- cbind(captures, wfratio) # using R base function `cbind`
+captures %&gt;% 
+  mutate(wfratio = weight_g/footlength_mm) -&gt; captures.new
+head(captures.new)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MjAsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzYgw5cgMjBdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQnBWVXpXNFRNUkQyL2lSTEFxMnFKaEljT1BTQUVCSWsvUVBDc1JWdHBCNlNTQ0ZGNVJTWmpaT3N1dXRkdkE0cEovb2E5TWlqSUJDUHdTdndCQzJ6RzgvRzJSQkJWL2swbjcveGpNY1QyOTJqcy8zeVdaa1FZaEhic29oVkFFb0twNzFtN1JVaHRna0RnOWlrbE5nTG1GUUJVZ1dzQVlxcGs1QjFaWTAwQ3lGbXptOHEzVTR5SzMwanRiUEU1ZDNuMnp1TjdiMmQzUmVaOHZJL2xNYXRGQmlwdFlsV3J3NjlabHVocUFIOTl3RU5RRVVoR2QvTC9OWFM0OHRrQmJCei91QXF0MmVqdlVTNlMwU2JnOUdFbEc3Z1cybFZRQlBKc1ZiM1U4QVRRQTN3RFBCSWFRdDF0WlpTdEZhN212bm93OXVSWFBSeUI1YUkyZFlrdGJYTDJWOWExYkNwb0xidS9QbzdzdFk0SzREK2I0RHZDajgwTEpSL2NqdXlHRTMrWVRkYkoyOU91NGU5enRiclRudnI3WEc3MThsbXpLNWc4ZlB2aERwZkQ1UjRZQ3ByZkVtK3EweTNIbjc0Q2IvYy9TNXdHckJZbFZWVllvbHlMNkIrM3h2Z2xYSnBKQ2VDelJWN1FDV2Q4eWxYL0U3b3VqVDJRaHc3VXRCSUMzUEhYb1NyQ0tiUzR0emhSQVJVbkdPcUtmTkdZOWtmcWJFVnN3dWtkSVJCZHdXTFJEK1dWRTVpSmEwTncxRDZqSS9rdUI4RXVQSW5SZ1Z1T2dpNUhHT3VvODQ3TENCbXNWWjdnWWVTWVZKbk9oUlVlbUd1ZnlVUlR1dll3K1RnbU9wZ0Z2T05kbjBhWTZOUkxDZGRyRVBpZ01Ib09oZmloQkVzeUNISXJKRDVDNW85elNJbmJFeDRVc21nNW80bi9MeTJ0NS96V3hFZmtkbUxxTDkrQnBtL2RFWjZDdEl5ekp2Y1lTMUNSejJPZlMvNDlEM3pNZk9BZlZSMEhScVM5cU1lQ1k5TDNDaW9jVjJHa3ZyWmtRcDlWTkt0aytzLzVGQ0tFSmNHQUFBPSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["animal_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["capture_id"],"name":[2],"type":["int"],"align":["right"]},{"label":["data"],"name":[3],"type":["chr"],"align":["left"]},{"label":["dawn"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["occasion"],"name":[5],"type":["int"],"align":["right"]},{"label":["trap_id"],"name":[6],"type":["int"],"align":["right"]},{"label":["chip"],"name":[7],"type":["int"],"align":["right"]},{"label":["recapture"],"name":[8],"type":["chr"],"align":["left"]},{"label":["furmark"],"name":[9],"type":["chr"],"align":["left"]},{"label":["weight_g"],"name":[10],"type":["int"],"align":["right"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["age"],"name":[12],"type":["chr"],"align":["left"]},{"label":["repr_status"],"name":[13],"type":["chr"],"align":["left"]},{"label":["footlength_mm"],"name":[14],"type":["int"],"align":["right"]},{"label":["year"],"name":[15],"type":["int"],"align":["right"]},{"label":["month"],"name":[16],"type":["int"],"align":["right"]},{"label":["DOY"],"name":[17],"type":["int"],"align":["right"]},{"label":["session"],"name":[18],"type":["chr"],"align":["left"]},{"label":["notes"],"name":[19],"type":["chr"],"align":["left"]},{"label":["wfratio"],"name":[20],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"1","3":"14/07/2015","4":"FALSE","5":"1","6":"23","7":"1313062","8":"N","9":"NA","10":"43","11":"M","12":"A","13":"R","14":"NA","15":"2015","16":"7","17":"194","18":"I","19":"","20":"NA","_rn_":"1"},{"1":"14","2":"2","3":"16/07/2015","4":"TRUE","5":"4","6":"55","7":"NA","8":"N","9":"NA","10":"40","11":"F","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":"","20":"2.000000","_rn_":"2"},{"1":"1","2":"3","3":"16/07/2015","4":"TRUE","5":"4","6":"19","7":"1313062","8":"R","9":"NA","10":"45","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":"","20":"2.250000","_rn_":"3"},{"1":"1","2":"4","3":"17/07/2015","4":"TRUE","5":"6","6":"19","7":"1313062","8":"R","9":"NA","10":"44","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"197","18":"I","19":"","20":"2.200000","_rn_":"4"},{"1":"3","2":"5","3":"17/07/2015","4":"TRUE","5":"6","6":"23","7":"NA","8":"N","9":"F","10":"36","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"MISURATO CON VENTO","20":"2.000000","_rn_":"5"},{"1":"2","2":"6","3":"17/07/2015","4":"TRUE","5":"6","6":"12","7":"1317018","8":"N","9":"E","10":"43","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"","20":"2.388889","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[20]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyByZW1vdmUgdGhlIGRhdGEgZnJhbWUgY2FwdHVyZXMubmV3IGZyb20gdGhlIHdvcmtpbmcgZW52aXJvbm1lbnRcbnJtKGNhcHR1cmVzLm5ldylcbmBgYCJ9 -->
+<pre class="r"><code># remove the data frame captures.new from the working environment
+rm(captures.new)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQXZ2ZXJ0aW1lbnRvOiBvZ2dldHRvICdjYXB0dXJlcy5uZXcnIG5vbiB0cm92YXRvXG4ifQ== -->
+<pre><code>Avvertimento: oggetto &#39;captures.new&#39; non trovato</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBub3cgYWRkIGJvdGggdGhlIGxvZyBvZiB0aGUgd2VpZ2h0IGFuZCB0aGUgY29sdW1uIHdmcmF0aW8gdG8gdGhlIGNhcHR1cmVzIGRhdGEgZnJhbWUsIGNyZWF0aW5nIGFnYWluIG5ldyBkYXRhIGZyYW1lIGNhbGxlZCBjYXB0dXJlcy5uZXdcbmNhcHR1cmVzICU+JSBcbiAgbXV0YXRlKGxvZ3cgPSBsb2cod2VpZ2h0X2cpLFxuICAgICAgICAgd2ZyYXRpbyA9IHdlaWdodF9nL2Zvb3RsZW5ndGhfbW0pIC0+IGNhcHR1cmVzLm5ld1xuaGVhZChjYXB0dXJlcy5uZXcpXG5gYGAifQ== -->
+<pre class="r"><code># now add both the log of the weight and the column wfratio to the captures data frame, creating again new data frame called captures.new
+captures %&gt;% 
+  mutate(logw = log(weight_g),
+         wfratio = weight_g/footlength_mm) -&gt; captures.new
+head(captures.new)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MjEsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzYgw5cgMjFdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQnBWVVQyOFNRUlFmZGhjUUtLUVdXajE0NEdDTVVhRXQybUxpWlp1MkpEMEFDVkpUVDJSY0J0aDAvems3bEhxeThWdllvM3J6V3hpTjhld0g4QXQ0Nk5tWTF0bGwzcklzRW1XenY3dzN2L2RuM25zN082MjlvNGZwb3pSQ1NFYUtMQ001emxVVVAyelhTbzhSVWlTK2lDRUZwVHg1eXAzeVhGbmx5SElrZkNOQ09TRmpmaGFFcEloZEVyemlaUmI4c2kvSGlkT2JqOVkzcXV1VmpjMnRnTm4rRDZhNkVNTlhZbThVcWplTWNNMktRQ0lFc04vZ3FITGtCYnoxVW1BdnBPNmNlVHR3T2RGdm5rZDZqalZtbE5hTUV2S0JhSVJTVi95WkswVkFEWlQ5VU4zM09lNXlsRGdlY053VzNGUmQ5WmtVOWZtbVdqUjZaekVsRWowN2dSbEZhb1FvMGRyWitKTVdRbGdSRUswbmYvd2R3V2lTY3dEMlR4eWZCYjZFTUZYK3dXTEtkRFQ2aDF5cEh6dzliTzIwbThYZFpxUDRiTC9SYmdZZTQxOHdvZWJXTHRZS1A2K3IyVGZmbjFSb1ZzMnh6TW43YngvVVhDMisvYnU5cXk1OXpQeTZWNVRBRCtKZVgzZ3BrdTlVa1V5VmhJeTk5Wjd6Z0pkdnZmekszOGk5RUxld1NWelJ6cW9nVTlqU1RXeDA5Qzc4aWhwMjJKQ1NDYU4wTWNNVGZXUUovWnF0YWRqVmJWZ25HY1ZPS0V3YjZBN3NRb2xJQzc2OUlUVXhQWVpVSTZMM0I2elRGMnZaSmFlZzRqNEVaU2h4YU1kbG1BMWRRV1Y3dHMwTVl2WFpvR09hc1BNcmdpazBiZG9XRzBDdXZlWnpLTUFsYnFqMnVHVXpBa2tWdys2UHdHL1VvNWpwZG1TV0tXcVB5akJQNy9CSjRuQW5va1BYRE96QzBJRk1leE10ODhRbTRhdkxTRWpTZHZpR0ZnK1M4bWh5Q3dmWE80MFF5MFBMcTZSYjBnWkQ2N2hVMllyWVpjZnFvL0d0R3I1QlkyaHlXOGI4RStHWElWMUZEbnlDVDFlMzRCdkVEZnlDR0pDNVMwNkVtdU1EOGVkUmRxaHVNV2lVczI2WjJRd2J3Zkd5RFdEODF0SGxIM2VXNGRIYkJnQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["animal_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["capture_id"],"name":[2],"type":["int"],"align":["right"]},{"label":["data"],"name":[3],"type":["chr"],"align":["left"]},{"label":["dawn"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["occasion"],"name":[5],"type":["int"],"align":["right"]},{"label":["trap_id"],"name":[6],"type":["int"],"align":["right"]},{"label":["chip"],"name":[7],"type":["int"],"align":["right"]},{"label":["recapture"],"name":[8],"type":["chr"],"align":["left"]},{"label":["furmark"],"name":[9],"type":["chr"],"align":["left"]},{"label":["weight_g"],"name":[10],"type":["int"],"align":["right"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["age"],"name":[12],"type":["chr"],"align":["left"]},{"label":["repr_status"],"name":[13],"type":["chr"],"align":["left"]},{"label":["footlength_mm"],"name":[14],"type":["int"],"align":["right"]},{"label":["year"],"name":[15],"type":["int"],"align":["right"]},{"label":["month"],"name":[16],"type":["int"],"align":["right"]},{"label":["DOY"],"name":[17],"type":["int"],"align":["right"]},{"label":["session"],"name":[18],"type":["chr"],"align":["left"]},{"label":["notes"],"name":[19],"type":["chr"],"align":["left"]},{"label":["logw"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["wfratio"],"name":[21],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"1","3":"14/07/2015","4":"FALSE","5":"1","6":"23","7":"1313062","8":"N","9":"NA","10":"43","11":"M","12":"A","13":"R","14":"NA","15":"2015","16":"7","17":"194","18":"I","19":"","20":"3.761200","21":"NA","_rn_":"1"},{"1":"14","2":"2","3":"16/07/2015","4":"TRUE","5":"4","6":"55","7":"NA","8":"N","9":"NA","10":"40","11":"F","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":"","20":"3.688879","21":"2.000000","_rn_":"2"},{"1":"1","2":"3","3":"16/07/2015","4":"TRUE","5":"4","6":"19","7":"1313062","8":"R","9":"NA","10":"45","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":"","20":"3.806662","21":"2.250000","_rn_":"3"},{"1":"1","2":"4","3":"17/07/2015","4":"TRUE","5":"6","6":"19","7":"1313062","8":"R","9":"NA","10":"44","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"197","18":"I","19":"","20":"3.784190","21":"2.200000","_rn_":"4"},{"1":"3","2":"5","3":"17/07/2015","4":"TRUE","5":"6","6":"23","7":"NA","8":"N","9":"F","10":"36","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"MISURATO CON VENTO","20":"3.583519","21":"2.000000","_rn_":"5"},{"1":"2","2":"6","3":"17/07/2015","4":"TRUE","5":"6","6":"12","7":"1317018","8":"N","9":"E","10":"43","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"","20":"3.761200","21":"2.388889","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[21]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBETyBJVCBPTiBZT1VSIE9XTiAtIEFERCBBTk9USEVSIFZBUklBQkxFIFRPIFRIRSBEQVRBIEZSQU1FLCBFLkcuIFlFQVIgKyAxXG5cbmBgYCJ9 -->
+<pre class="r"><code># DO IT ON YOUR OWN - ADD ANOTHER VARIABLE TO THE DATA FRAME, E.G. YEAR + 1
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="filter" class="section level2">
+<h2>Filter</h2>
+<p>It is often useful to subset or remove observations based on some
+condition.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuP2ZpbHRlciBcblxuIyBmaWx0ZXIgZGF0YSBzZWxlY3Rpbmcgb25seSB3ZWlnaHRzIDwgMjVcbmZpbHRlcihjYXB0dXJlcywgd2VpZ2h0X2cgPT0gMjUpXG5cbiMgZmlsdGVyIGRhdGEgc2VsZWN0aW5nIG9ubHkgd2VpZ2h0cyA8IDI1XG5maWx0ZXIoY2FwdHVyZXMsIHdlaWdodF9nIDwgMjUpXG5cbiMgZmlsdGVyIGRhdGEgc2VsZWN0aW5nIG9ubHkgd2VpZ2h0cyA8IDI1IG9yID4gNDBcbmZpbHRlcihjYXB0dXJlcywgd2VpZ2h0X2cgPCAyNSB8IHdlaWdodF9nID4gNDApXG5cbiMgZmlsdGVyIGRhdGEgc2VsZWN0aW5nIG9ubHkgd2VpZ2h0cyA+IDQwIGFuZCBmb290IGxlbmd0aCA+IDE4XG5maWx0ZXIoY2FwdHVyZXMsIGZvb3RsZW5ndGhfbW0gPiAxOCAmIHdlaWdodF9nID4gNDApXG5gYGAifQ== -->
+<pre class="r"><code>?filter 
+
+# filter data selecting only weights &lt; 25
+filter(captures, weight_g == 25)
+
+# filter data selecting only weights &lt; 25
+filter(captures, weight_g &lt; 25)
+
+# filter data selecting only weights &lt; 25 or &gt; 40
+filter(captures, weight_g &lt; 25 | weight_g &gt; 40)
+
+# filter data selecting only weights &gt; 40 and foot length &gt; 18
+filter(captures, footlength_mm &gt; 18 &amp; weight_g &gt; 40)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Do the same using the pipe operator (complete the exercise on the
+basis of the first example):</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBmaWx0ZXIgZGF0YSBzZWxlY3Rpbmcgb25seSB3ZWlnaHRzIDwgMjVcbmNhcHR1cmVzICU+JSBcbiAgZmlsdGVyKHdlaWdodF9nID09IDI1KVxuXG4jIGZpbHRlciBkYXRhIHNlbGVjdGluZyBvbmx5IHdlaWdodHMgPCAyNVxuXG5cbiMgZmlsdGVyIGRhdGEgc2VsZWN0aW5nIG9ubHkgd2VpZ2h0cyA8IDI1IG9yID4gNDBcblxuXG4jIGZpbHRlciBkYXRhIHNlbGVjdGluZyBvbmx5IHdlaWdodHMgPiA0MCBhbmQgZm9vdCBsZW5ndGggPiAxOFxuXG5gYGAifQ== -->
+<pre class="r"><code># filter data selecting only weights &lt; 25
+captures %&gt;% 
+  filter(weight_g == 25)
+
+# filter data selecting only weights &lt; 25
+
+
+# filter data selecting only weights &lt; 25 or &gt; 40
+
+
+# filter data selecting only weights &gt; 40 and foot length &gt; 18
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBETyBJVCBPTiBZT1VSIE9XTiAtIFNFTEVDVCBPTkxZIENBUFRVUkVTIFJFQ09SREVEIEFGVEVSIERPWSAyMTBcblxuXG4jIFNFTEVDVCBPTkxZIENBUFRVUkVTIFJFQ09SREVEIElOIEpVTFlcblxuYGBgIn0= -->
+<pre class="r"><code># DO IT ON YOUR OWN - SELECT ONLY CAPTURES RECORDED AFTER DOY 210
+
+
+# SELECT ONLY CAPTURES RECORDED IN JULY
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="select" class="section level2">
+<h2>Select</h2>
+<p><code>select()</code> allows you to rapidly zoom in on a useful
+subset using operations based on the names of the variables.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzZWxlY3QgY29sdW1ucyBieSBuYW1lXG5jYXB0dXJlcyAlPiUgXG4gIHNlbGVjdCh3ZWlnaHRfZywgc2V4LCBhZ2UsIGZvb3RsZW5ndGhfbW0pXG5cbiMgc2VsZWN0IGFsbCBjb2x1bW5zIGJldHdlZW4gd2VpZ2h0IGFuZCBhZ2VcbmNhcHR1cmVzICU+JSBcbiAgc2VsZWN0KHdlaWdodF9nOmFnZSlcblxuIyBzZWxlY3QgYWxsIGNvbHVtbnMgZXhjZXB0IGRhd25cbmNhcHR1cmVzICU+JSBcbiAgc2VsZWN0KC0oZGF3bikpXG5cbiMgc2VsZWN0IGFsbCBjb2x1bW5zIGV4Y2VwdCB0aG9zZSBmcm9tIGFuaW1hbF9pZCB0byBmdXJtYXJrXG5jYXB0dXJlcyAlPiUgXG4gIHNlbGVjdCgtKGFuaW1hbF9pZDpmdXJtYXJrKSlcblxuIyBzZWxlY3QgY29sdW1ucyBmcm9tIHdlaWdodF9nIHRvIGZvb3RsZW5naHRfbW0sIGV4Y2x1ZGluZyByZXByb2R1Y3RpdmUgc3RhdHVzXG5jYXB0dXJlcyAlPiUgXG4gIHNlbGVjdCh3ZWlnaHRfZzpmb290bGVuZ3RoX21tKSAlPiUgXG4gZHBseXI6OiBzZWxlY3QoLXJlcHJfc3RhdHVzKVxuXG5gYGAifQ== -->
+<pre class="r"><code># select columns by name
+captures %&gt;% 
+  select(weight_g, sex, age, footlength_mm)
+
+# select all columns between weight and age
+captures %&gt;% 
+  select(weight_g:age)
+
+# select all columns except dawn
+captures %&gt;% 
+  select(-(dawn))
+
+# select all columns except those from animal_id to furmark
+captures %&gt;% 
+  select(-(animal_id:furmark))
+
+# select columns from weight_g to footlenght_mm, excluding reproductive status
+captures %&gt;% 
+  select(weight_g:footlength_mm) %&gt;% 
+ dplyr:: select(-repr_status)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Please note: <code>filter()</code> and <code>select()</code> are the
+<code>dplyr</code> alternative to the <code>subset()</code> base
+function, and they are easier to use!</p>
+</div>
+<div id="aggregate-and-produce-grouped-summaries" class="section level2">
+<h2>Aggregate and produce grouped summaries</h2>
+<p>When we aggregate data, we collapse multiple values into a single
+value (e.g. by summing or taking means).<br />
+For this purpose, in <code>dplyr</code> we couple two functions,
+<code>summarise()</code> and <code>group_by</code></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FwdHVyZXMgJT4lIFxuICBncm91cF9ieShzZXgpICU+JSBcbiAgc3VtbWFyaXNlKG1lYW4od2VpZ2h0X2csIG5hLnJtPVRSVUUpKVxuYGBgIn0= -->
+<pre class="r"><code>captures %&gt;% 
+  group_by(sex) %&gt;% 
+  summarise(mean(weight_g, na.rm=TRUE))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MiwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIyIMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFRdTA3RE1CUzlqWk9nUm1wVmlZV0JJU05JSkV0QllrRnFKUjU3MWFKdXlDUW1qVWpzS0hFcEkzL0ExcWsvdzJkbGFiZ085b0E5K0I2ZjYzUHVZM0cvbmdickFBQUl1SVFBOFJDQ3QxbytScmNBcm9PUEFiZ3dWUEVUUDUwaVVPU2tqem94TitBSnI3SEt6T2JQcmRpMzFlejZjTmIrZkI4c0s0L1RraldXRGFFWjAvQzhaSlJmN0ZpZWJlUkxkaFZ5R3RkbGVCY3VGNnVIUzh0cldJdGRiUHhHeXU4THI2N3JqbmJScEtDTktXcklJS1dTeG04MTZ2RmxTMDVFSlhQQlVlU293WDFMUEtndFlyTGxxcE0wU2paYi9oNU5iNnc4cVhpbWl2YlUzeGxwN1B6SHFnMm4wM0pmeTMzR3M1eWJKWGtGZldXRmNVN1poNFpqWEVpL2o3aXFjeTdOb01nMnNSU1NHa21RaU1Jdy9laHcvQVh2SGs4c0RnSUFBQT09In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean(weight_g, na.rm = TRUE)"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"34.67949"},{"1":"G","2":"20.60976"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[2]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>What if we want to take into account both sex and age?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FwdHVyZXMgJT4lXG4gIGdyb3VwX2J5KGFnZSwgc2V4KSAlPiUgXG4gIHN1bW1hcmlzZShtZWFuKHdlaWdodF9nLCBuYS5ybT1UUlVFKSlcbmBgYCJ9 -->
+<pre class="r"><code>captures %&gt;%
+  group_by(age, sex) %&gt;% 
+  summarise(mean(weight_g, na.rm=TRUE))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Using <em>dplyr</em> the code is easy to interpret and we can also
+easily add other summary statistics, e.g.:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FwdHVyZXMgJT4lXG4gIGdyb3VwX2J5KGFnZSwgc2V4KSAlPiUgXG4gIHN1bW1hcmlzZShtdyA9IG1lYW4od2VpZ2h0X2csIG5hLnJtPVRSVUUpLCBtZiA9IG1lYW4oZm9vdGxlbmd0aF9tbSwgbmEucm09VFJVRSkpXG5gYGAifQ== -->
+<pre class="r"><code>captures %&gt;%
+  group_by(age, sex) %&gt;% 
+  summarise(mw = mean(weight_g, na.rm=TRUE), mf = mean(footlength_mm, na.rm=TRUE))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Please note that grouping affects almost all following functions, so
+it is sometimes necessary to remove the grouping of a dataset to
+continue with the analyses. You can do that with the
+<code>ungroup()</code> function:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FwdHVyZXMgJT4lIFxuICBncm91cF9ieShzZXgpICU+JSBcbiAgc3VtbWFyaXNlKG1lYW4od2VpZ2h0X2csIG5hLnJtPVRSVUUpKSAtPiBncm91cGVkLmNhcHR1cmVzXG51bmdyb3VwKGdyb3VwZWQuY2FwdHVyZXMpXG5cbiMgb3I6XG5jYXB0dXJlcyAlPiUgXG4gIGdyb3VwX2J5KHNleCkgJT4lIFxuICBzdW1tYXJpc2UobWVhbih3ZWlnaHRfZywgbmEucm09VFJVRSkpICU+JSBcbiAgdW5ncm91cCgpXG5cbmBgYCJ9 -->
+<pre class="r"><code>captures %&gt;% 
+  group_by(sex) %&gt;% 
+  summarise(mean(weight_g, na.rm=TRUE)) -&gt; grouped.captures
+ungroup(grouped.captures)
+
+# or:
+captures %&gt;% 
+  group_by(sex) %&gt;% 
+  summarise(mean(weight_g, na.rm=TRUE)) %&gt;% 
+  ungroup()
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="sort-order-and-arrange" class="section level2">
+<h2>Sort, order and arrange</h2>
+<p>In this case, we do not compute new variables, we just change the
+order of the observations</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzb3J0IHRoZSB3ZWlndGggb2YgdGhlIGFuaW1hbHNcbnNvcnQoY2FwdHVyZXMkd2VpZ2h0X2cpXG5gYGAifQ== -->
+<pre class="r"><code># sort the weigth of the animals
+sort(captures$weight_g)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc29ydChjYXB0dXJlcyR3ZWlnaHRfZywgZGVjcmVhc2luZyA9IFRSVUUpXG5gYGAifQ== -->
+<pre class="r"><code>sort(captures$weight_g, decreasing = TRUE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Ordering the whole data frame with the <em>base</em> package is a
+little bit tricky (see <em>?order</em> for examples), while it’s easy
+with <em>dplyr</em></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FwdHVyZXMgJT4lXG4gIGFycmFuZ2Uod2VpZ2h0X2cpXG5gYGAifQ== -->
+<pre class="r"><code>captures %&gt;%
+  arrange(weight_g)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FwdHVyZXMgJT4lXG4gIGFycmFuZ2UoZGVzYyh3ZWlnaHRfZykpXG5gYGAifQ== -->
+<pre class="r"><code>captures %&gt;%
+  arrange(desc(weight_g))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBETyBJVCBPTiBZT1VSIE9XTiAtIEFSUkFOR0UgVEhFIERBVEEgRlJBTUUgQUNDT1JESU5HIFRPIEZPT1QgTEVHVEgsIEJPVEggSU4gQVNDRU5ESU5HIEFORCBERVNDRU5ESU5HIE9SREVSXG5cblxuYGBgIn0= -->
+<pre class="r"><code># DO IT ON YOUR OWN - ARRANGE THE DATA FRAME ACCORDING TO FOOT LEGTH, BOTH IN ASCENDING AND DESCENDING ORDER
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>See <em>?arrange</em> to order taking into account grouping (see
+example at the bottom of the help file)</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBETyBJVCBPTiBZT1VSIE9XTlxuP2FycmFuZ2VcblxuXG5gYGAifQ== -->
+<pre class="r"><code># DO IT ON YOUR OWN
+?arrange
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MTMzLCJuY29sIjoxOSwic3VtbWFyeSI6eyJEZXNjcmlwdGlvbiI6WyJkZiBbMTMzIMOXIDE5XSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJ1MWNiWE5UeHhWZVM1WnRHYi9JdGdpQkVDd0NHQWhneTd4RFE0c3N5M0JiUzNKbG1aSytVY1VJN0dKTHJpd0gwbGRTeWt4bitnL2FuNUp2blNZREpIOGgwMzdNbDJMRFROb21IMGpQMFQzSFd0MWRYZTIxYkNoVFBQUE1QWGYzbk9lODdMa3I3V1ZRWnZ6cWljNnJuVUlJdjJqMSs0VS9BS0lJekdRbmpwMFZvdFVITnkyaVZRVHhlZ2VVQmtCQWRBUHVBM2FnTnVDMWlxSVFnM1JGK0NRNVFHZ0ZiQVAwQVBvQmh5cWVxOWhHNkpiczBQbmJaRHRMYzkwMHgzWjQveGJGMWdib0FIVFMzRUhpWUM0ZnlSMDAzeWZKYlRSL0JOQkYrb2h4bW1QZ1dJeDh5SHA0Mys0QXo2TThRakx6c001eFNWZTIvUTRnQ3RnSitCYmdHUGs0Q1RnUE9BMDRBWWdBUmdGamdET0FPR0FQNEhYQUFjQXdJQVRZRHpnRnVBQzRDQmdDSEFic0Jld0NmQnNRQm15WGFyak5zWTY5Z0RjQXV3RnZBbzRDb0ZuRU9jQTdvdG9iQTdSdS9WVGJ2YlNHdlpUN2ZsSHRtWVBrYTV6cTMwVjViYWU4WndBWndNOEF2NkdZc1pZL0l0L1lmNGRvVFg0cDdENEpVR3hMbEdjMzFjMmlXbkZ0c2ZaSndBK0YzWmVuS1pjOWxEdldkQi9nQjVRdjF2MEsxVzhTOEFlcWR4cndBZUJEd084QTN3UDhHSkFGTEFPdUFSWUJLNEE3VktNUzRCS3R4d1JnSHJBQUtOTTZYUVpNQTM0TCtEM2dKNENyZ091QVh3RytLK3huc0VocjkzMUFEbEFBNUFIdkN2dTVTQUh1QW00QTdnbTdYM0Nkc1o4U3d1NUo3UG4zQU84RGZpM3Nuc0Zld3Y3QlByb3Q3QjdDNTJVS2NBdHdVOWg5aXIzd1UySDNEUFlxOWhMMkNQYkRIT0RuZ0YrUS9YM2FVRHFQajQ1RXo0d2NqNDZlV2g4NXFZeEVuU09qcHhXZDQ0ck9HUU1lVmVlRW9xUEdvL2pTV0oxVmRNNk5STTgyeUVKamRjWnBwYW5ZV2FmT2lhakJ5S2h6SkhwcUpIcXUwVm9vOGFnOGFqeEdxNnhZUlU4NjQxRjlhVlpRWVk2ZVVQSlMxa3Z0RFUwV3lncHFWa2UxVW5YVUdocXNsMUdFNm9qNlhCaDBwbG9mVFR6cVUyRFFoeVpWQlZybmVpazZLclBhTGRIVGpVYzB6RXFQYVh3cEhhVjVtaFFkellnYXM1SzdwbnZWOVRLbzZzWWlOR0pXNjJOUWVaTTZHKzFSYWpXVTNjWWtMeVB2QnV0dThxU1lWRXpqWFgwdTFHZlFaS2RWUDRuVVBVR3hNdW9mazA4UXRhUFUzVmhkUWVWSjBleUh5b2pKbWhwOXBpanhiTXpLYUVUdFRJT1lwYlVRbFcvUitNMnl4UUZoT05ab1RqVGdFeTYyVGgxWjE4MUdONi96cGVOMWk2RlJUa0tqWDg5SG8vaE1Zek5kS3gyZjJ4aktmRExEVXc1Kys4ZFRGcDdJOEJ0OUc5M2p0Wi8wUXlSM2tGNHJ5UzNFNFJQVmt5eU9EeEJ2QzkzN0pGOTgwZzZTZmxoVTN3SjBpZXFwdklWME9VOCtKYk9PaitMaW1QcHBQaVRGNHlldUhhVFRScjYzRS9qMDMwWXhkTkMxaC9SMmtOeEtYSzBVTit0d3JHMFNad2ZGRWFRNkJDUjlmclBBZm9LazJ5ZHhCTWx2bjFRenJuZFlzdVVhK3loM2pybExXcitnNUtOWGlxMVhnay9TUXc3dURaeTdLT3pUT3ZvYW9pdnpoeWpPdHdoNDhzVlRLSjRVSThJK0llT3BFay8wKzJnTytmQjBlVUZVVDVUbmhQMTJnTytQa0l6Y2VQSk9rRDNHdVkxaU9FajhlTXJmVFJ5bzAwbTJ3OFI1aEdyTzY0RXhINlY0QjhtR3h3ZW9qdnRFOVkzVVB1TEg2enVTL3g2cXdWNmE2eUpmZzFUallhcGpGOVdsaDN4eUh3eFFmUzNpd05QOWVhclBPT25nMjR3SjRweWdlbHltYTVENDBmY2w0dHRGTmZaVDdvT1VWdy9WeWs4NUhhUzZYYVRybUZUL0M4UzdpK0xGZFJ5bFdOZmY2TndWOWlzRUVlNzdod2dIaDJ3NU9HVGo5VCt6dks0MzhPd3ZJdHoxRWQ5WDdYdnYyZWo2eUViMzUxVyt3TmNpM1BOSFcrNitiTThoK3I2bzJuWi9YdVhxNm9YNzh6d254ZmlGellWeG9jdzZRVWtmYlhGK3g2SUk5Ly9KMWc5OFhaMWo4RmovaDdLZWZkLzd6MXJ3UE1wdDkyeVplVmduK0VsVnQycnJyQlA3MUkxdk5yQW1kajY0SHJ5bWRzMWQ3V3JmNkxTa1dNaDRHVEZSTnBseUVWUmZUUXFlUXZXVXUwbktucHg2Q3Q2VCtjWXliVko1NjFadzB3dlZaSzk2c25vWmhTWVhUa2NJSDVMZndKK2JidTJlNVkrTnhIbHViTjI4bHNZZkh4bXZNOVdTcURjeHBnanhldlJTQ0RFV0pqU0MwN3lCWitCTk9PZllrWCtzZmtwakczQ3RaS1NRK0JNakUzSmd1bURYYTZvc1NOMUFsSWtHNnlMNXFhbFB3NFNjcGF6azZNNnRVZHlBTzRPcHpiNnVONlBMOG01MURJNVkxRzV0a3RDbHdQV1RxN3RSZUwveWdXdFl3akhDVWNJUkNmaGwvYkN3djh3ekRoS0dESENnRHZacnNLOEIrUEMzVjBLRU1DaGhqd052YXJEYmdUZGNzRXZDVGhmZ1AxZnVrUENhaE8wU3doSUdOT2ozaUQ1Q0NOQnpWMnp3eTdqalMzV3lLamphVURQZ0ZDYnFUNWtvVDlSMXBmdDg4dURLVXhRbXlwcEk2MFhzYXR4VWZDNkVKdlhTTVRkVGRrODZtNVg2MWxWWFhkbEd6NFB5cmFEK0Y1bUdQbDcwZFdNTFo4eGFYekVrcE0wbzlrcDRKVHd2NFpLQjRHSzFNUmN1UENieGVJcDVzd2ovWjRWTmJ3Q3pKbkZzV3Z6cXdKZFNYaERJVTQ2aFRSZFU5MVd2T2tuUDBOeWNxeDkzTlpmcXVUSzRSV2hVZHEra3hneU5zdkZRbUJjcnZYd1IvMzlJbnJjWHQrMUI2VlozWlg2L2dPZFNQTXM2ejd0aG1ndmZGWlUvNTltM2NpYW1PZm1NNjlSaDlOV1psKzNZVjUrazM2L2g2dGR3c3V6MEU5Ync5a2xqVG43ZHVkMFphMWlvTWNxNjlUZ0dIRFloUjl5c2s2TFlRcUkyWmgxdlRYNmFQSlg2b1k0YnhIcHZ0UC85RlY2aEZ1djdodk8vc1ppZ1F5TjNPQkRVak1zMlFjZFkwREh2aHZZNm5JM2lrZVdnWTB6V0NXcWc0OVBaMStOc2Q1bVRZNVpqY0t0NVVOVFd1RkVkZFR3NlBiVG4zbmdJK0F6d0FQQTN3Q1BBeDNTUDEwOEJmNlZ4bEQ4QnJKRXV5bytKWXhYd2hQQVU4Ry9pZlV6M3E1SXZsUDlGNHgvVDJKZkUvNERtMThoMmxhNlBKWDdXV2FXNE9LWlBhZjZSRkE5emZVWFhKK1Q3UDRRMWl1TUp4ZkNVcmwrUzNsY2tyMGxjc3M2cXhNdWN6TWQxV0tQY1dmK0p4TUc2anlTT3ArVDNrVlN6TmNyek04bVdhN3hLdVQra21COFEyQS9YK2FGRFpxeEtlc2diRXRLSnkzb0Jncy95TkZjZE1wVU1UZDI4ZTlYM3lyWEpTWGtzNUpZRitVcHFxaU8zaks3cHA5RXdpaTJoTitMYXlBTll1eGVLRjN6ZE9SMlBUVTNGc3VtamtZbDBaam9SbVVwTXBpTldLaEtyWXhCSXBqUFp0Q0g3bm1Rc0ZZOWxZNUhKUkRZN2s0bEZFbGNTcWV4TWJOS0t4QzliVTNXczNwNUtUMDliWTlaa0lwS01aY0FlTFRtdWVPUlFLcDJLVEZ2eG1ZeDFtQ3hDU1N1ZVNTTmxaR1k2YmpXTXJ6OXBUUU5wTmgySkF4ZkdaSnBSY3htYWFXK3NhbzJ1WG12VXJOMVdYUStrTTRuSTZQSGhhUFJvWkRvQjZ6ZWVqbHl5TW1ub2tBd3VaemFUbnB6Y3JDQ2ZxN09YN2ZwY2kxT3o3d3lOVzBsNEpLeDRaZU1DUDFmd1dhNW9RQVRwVENvZEdVOVBwWFdtd1d3aU9aWE94Q1lURGdmQmpCVkxXY2xZWTAyK0RsYjJKSHVMcXV4Tk0rQVhzcmRtSWxNekVCMnBEZGh4WVZFU21XUmljdEpLc1lzTzNuM3J4MUw3TXh1QlFtNHhqejhYRUVKaTFzNFY1aGR6QzlmbXI5TkE1Mnh1cWJ4U3lsZEhXcS9ueXJtcWZMdkFBUlJuWjNQTDgwVytieStYY2t1UzJlemMvQko3S2VXSmxuVnZySlFXYzZWYlRIVTdQMzl6cm56dEp0MzdsL04zV016ZFpLTnRwZnhTNmRweU9WZGVXYWFoN2h2Rllua2hYN2habnJ1MnVNaWVQOGpuU3B6MFlyRlFubU91OGZTN0hNQnlmbG1LUFZBb2xyRTJOUVVMbG9xM2g3bG9lRUQxM2EzVUdRK3F0WldkWGNndGMyVjVzQlBMTm55akJQWnc5OHhoMGw1Y0tvTjdNUEx4TDR2SXhpMGx4MEJvcFlDUlhEODJPN2RTdUhYczVLaGozcjlVd0Y5TTZLd00yWC84U3lmM0pYbkFEc1AzRFptM2tYa2JsSEMrd0lVT0xPVGV5eTh3OC9YOCt5VDJRRUVxOVJoZUtzMFh5cHdvakM0UGw0dmwzTUo2RHhVWGVLU1N1bmoyWCs3bUFQUVBSZ0FBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["animal_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["capture_id"],"name":[2],"type":["int"],"align":["right"]},{"label":["data"],"name":[3],"type":["chr"],"align":["left"]},{"label":["dawn"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["occasion"],"name":[5],"type":["int"],"align":["right"]},{"label":["trap_id"],"name":[6],"type":["int"],"align":["right"]},{"label":["chip"],"name":[7],"type":["int"],"align":["right"]},{"label":["recapture"],"name":[8],"type":["chr"],"align":["left"]},{"label":["furmark"],"name":[9],"type":["chr"],"align":["left"]},{"label":["weight_g"],"name":[10],"type":["int"],"align":["right"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["age"],"name":[12],"type":["chr"],"align":["left"]},{"label":["repr_status"],"name":[13],"type":["chr"],"align":["left"]},{"label":["footlength_mm"],"name":[14],"type":["int"],"align":["right"]},{"label":["year"],"name":[15],"type":["int"],"align":["right"]},{"label":["month"],"name":[16],"type":["int"],"align":["right"]},{"label":["DOY"],"name":[17],"type":["int"],"align":["right"]},{"label":["session"],"name":[18],"type":["chr"],"align":["left"]},{"label":["notes"],"name":[19],"type":["chr"],"align":["left"]}],"data":[{"1":"23","2":"19","3":"21/07/2015","4":"TRUE","5":"14","6":"15","7":"NA","8":"N","9":"A/C","10":"46","11":"M","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"5","2":"42","3":"24/07/2015","4":"TRUE","5":"20","6":"64","7":"NA","8":"R","9":"B","10":"46","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"7","17":"204","18":"I","19":""},{"1":"22","2":"18","3":"20/07/2015","4":"TRUE","5":"12","6":"33","7":"1315296","8":"N","9":"NA","10":"46","11":"NA","12":"A","13":"NA","14":"21","15":"2015","16":"7","17":"200","18":"I","19":""},{"1":"1","2":"3","3":"16/07/2015","4":"TRUE","5":"4","6":"19","7":"1313062","8":"R","9":"NA","10":"45","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":""},{"1":"31","2":"33","3":"22/07/2015","4":"FALSE","5":"17","6":"38","7":"NA","8":"N","9":"C/D","10":"45","11":"NA","12":"A","13":"NR","14":"20","15":"2015","16":"7","17":"202","18":"I","19":""},{"1":"1","2":"4","3":"17/07/2015","4":"TRUE","5":"6","6":"19","7":"1313062","8":"R","9":"NA","10":"44","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"197","18":"I","19":""},{"1":"1","2":"15","3":"20/07/2015","4":"TRUE","5":"12","6":"12","7":"1313062","8":"R","9":"NA","10":"44","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"200","18":"I","19":""},{"1":"2","2":"6","3":"17/07/2015","4":"TRUE","5":"6","6":"12","7":"1317018","8":"N","9":"E","10":"43","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"197","18":"I","19":""},{"1":"1","2":"36","3":"23/07/2015","4":"TRUE","5":"18","6":"16","7":"1313062","8":"R","9":"NA","10":"43","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"203","18":"I","19":""},{"1":"1","2":"1","3":"14/07/2015","4":"FALSE","5":"1","6":"23","7":"1313062","8":"N","9":"NA","10":"43","11":"M","12":"A","13":"R","14":"NA","15":"2015","16":"7","17":"194","18":"I","19":""},{"1":"5","2":"31","3":"22/07/2015","4":"TRUE","5":"16","6":"34","7":"NA","8":"N","9":"B","10":"42","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"7","17":"202","18":"I","19":""},{"1":"5","2":"39","3":"23/07/2015","4":"TRUE","5":"18","6":"34","7":"NA","8":"R","9":"B","10":"41","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"7","17":"203","18":"I","19":""},{"1":"4","2":"10","3":"18/07/2015","4":"TRUE","5":"8","6":"67","7":"1310363","8":"N","9":"C","10":"40","11":"F","12":"A","13":"R","14":"19","15":"2015","16":"7","17":"198","18":"I","19":""},{"1":"11","2":"68","3":"29/08/2015","4":"TRUE","5":"4","6":"74","7":"1313979","8":"N","9":"NA","10":"40","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"14","2":"2","3":"16/07/2015","4":"TRUE","5":"4","6":"55","7":"NA","8":"N","9":"NA","10":"40","11":"F","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"196","18":"I","19":""},{"1":"18","2":"12","3":"18/07/2015","4":"TRUE","5":"8","6":"32","7":"NA","8":"N","9":"A/C","10":"39","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"7","17":"198","18":"I","19":""},{"1":"40","2":"51","3":"27/08/2015","4":"FALSE","5":"1","6":"29","7":"NA","8":"N","9":"A","10":"39","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"8","17":"238","18":"II","19":"SCAPPATO, FORSE PELO IN A"},{"1":"3","2":"21","3":"21/07/2015","4":"TRUE","5":"14","6":"45","7":"NA","8":"R","9":"F","10":"38","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"3","2":"59","3":"28/08/2015","4":"TRUE","5":"2","6":"39","7":"1314691","8":"R","9":"F","10":"38","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"3","2":"85","3":"30/08/2015","4":"TRUE","5":"6","6":"35","7":"1314691","8":"R","9":"F","10":"38","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"241","18":"II","19":"MORTO"},{"1":"11","2":"82","3":"30/08/2015","4":"TRUE","5":"6","6":"74","7":"1313979","8":"R","9":"NA","10":"38","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"11","2":"96","3":"31/08/2015","4":"TRUE","5":"8","6":"64","7":"1313979","8":"R","9":"NA","10":"38","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"13","2":"125","3":"05/09/2015","4":"FALSE","5":"19","6":"43","7":"1314269","8":"R","9":"NA","10":"38","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"9","17":"247","18":"II","19":""},{"1":"1","2":"41","3":"24/07/2015","4":"TRUE","5":"20","6":"61","7":"1313062","8":"R","9":"NA","10":"38","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"204","18":"I","19":""},{"1":"5","2":"47","3":"27/08/2015","4":"FALSE","5":"1","6":"55","7":"NA","8":"R","9":"B","10":"38","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"8","17":"238","18":"II","19":"MANCATA LETTURA EVENTUALI CHIP"},{"1":"9","2":"91","3":"31/08/2015","4":"TRUE","5":"8","6":"37","7":"1312250","8":"R","9":"A/E","10":"38","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"42","2":"56","3":"28/08/2015","4":"TRUE","5":"2","6":"57","7":"1314440","8":"N","9":"NA","10":"37","11":"M","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"4","2":"22","3":"21/07/2015","4":"TRUE","5":"14","6":"42","7":"NA","8":"R","9":"C","10":"37","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"201","18":"I","19":"POSSIBILE MARCATURA PELO IN C (NON SICURI)"},{"1":"99","2":"40","3":"24/07/2015","4":"TRUE","5":"20","6":"55","7":"1314120","8":"N","9":"B/D","10":"37","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"7","17":"204","18":"I","19":"MICROCHIP USCITO"},{"1":"13","2":"65","3":"28/08/2015","4":"FALSE","5":"3","6":"37","7":"1314269","8":"N","9":"NA","10":"37","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"13","2":"122","3":"04/09/2015","4":"FALSE","5":"17","6":"43","7":"1314269","8":"R","9":"NA","10":"37","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"9","17":"246","18":"II","19":""},{"1":"5","2":"99","3":"31/08/2015","4":"FALSE","5":"9","6":"55","7":"1315304","8":"R","9":"B","10":"37","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"3","2":"5","3":"17/07/2015","4":"TRUE","5":"6","6":"23","7":"NA","8":"N","9":"F","10":"36","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"197","18":"I","19":"MISURATO CON VENTO"},{"1":"3","2":"44","3":"24/07/2015","4":"TRUE","5":"20","6":"30","7":"1314691","8":"R","9":"F","10":"36","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"204","18":"I","19":""},{"1":"13","2":"112","3":"03/09/2015","4":"TRUE","5":"14","6":"69","7":"1314269","8":"R","9":"NA","10":"36","11":"M","12":"A","13":"NR","14":"19","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"34","2":"38","3":"23/07/2015","4":"TRUE","5":"18","6":"35","7":"NA","8":"N","9":"NA","10":"36","11":"NA","12":"A","13":"NR","14":"20","15":"2015","16":"7","17":"203","18":"I","19":""},{"1":"19","2":"13","3":"20/07/2015","4":"TRUE","5":"12","6":"2","7":"NA","8":"N","9":"NA","10":"36","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"7","17":"200","18":"I","19":""},{"1":"6","2":"52","3":"28/08/2015","4":"TRUE","5":"2","6":"11","7":"1313807","8":"N","9":"NA","10":"35","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"8","2":"73","3":"29/08/2015","4":"FALSE","5":"5","6":"19","7":"1314106","8":"R","9":"NA","10":"35","11":"M","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"10","2":"49","3":"27/08/2015","4":"FALSE","5":"1","6":"39","7":"NA","8":"N","9":"A/B","10":"35","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"238","18":"II","19":"MANCATA LETTURA EVENTUALI CHIP"},{"1":"3","2":"63","3":"28/08/2015","4":"FALSE","5":"3","6":"29","7":"1314691","8":"R","9":"F","10":"35","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"39","2":"48","3":"27/08/2015","4":"FALSE","5":"1","6":"65","7":"NA","8":"N","9":"E/F","10":"35","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"8","17":"238","18":"II","19":"MANCATA LETTURA EVENTUALI CHIP"},{"1":"9","2":"50","3":"27/08/2015","4":"FALSE","5":"1","6":"28","7":"NA","8":"N","9":"A/E","10":"35","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"238","18":"II","19":"MANCATA LETTURA EVENTUALI CHIP"},{"1":"5","2":"77","3":"30/08/2015","4":"TRUE","5":"6","6":"57","7":"1315304","8":"R","9":"B","10":"35","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"9","2":"90","3":"30/08/2015","4":"FALSE","5":"7","6":"35","7":"1312250","8":"R","9":"A/E","10":"35","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"2","2":"14","3":"20/07/2015","4":"TRUE","5":"12","6":"10","7":"1317018","8":"R","9":"E","10":"34","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"200","18":"I","19":""},{"1":"5","2":"54","3":"28/08/2015","4":"TRUE","5":"2","6":"55","7":"1315304","8":"R","9":"B","10":"34","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"8","2":"57","3":"28/08/2015","4":"TRUE","5":"2","6":"46","7":"1314106","8":"N","9":"NA","10":"33","11":"M","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"3","2":"30","3":"22/07/2015","4":"TRUE","5":"16","6":"42","7":"NA","8":"R","9":"F","10":"33","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"202","18":"I","19":""},{"1":"17","2":"11","3":"18/07/2015","4":"TRUE","5":"8","6":"43","7":"1313039","8":"N","9":"NA","10":"33","11":"F","12":"A","13":"NR","14":"19","15":"2015","16":"7","17":"198","18":"I","19":"MICROCHIP USCITO"},{"1":"8","2":"66","3":"29/08/2015","4":"TRUE","5":"4","6":"3","7":"1314106","8":"R","9":"NA","10":"32","11":"M","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"3","2":"35","3":"23/07/2015","4":"TRUE","5":"18","6":"7","7":"NA","8":"R","9":"F","10":"32","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"7","17":"203","18":"I","19":""},{"1":"6","2":"87","3":"30/08/2015","4":"FALSE","5":"7","6":"9","7":"1313807","8":"R","9":"NA","10":"31","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"2","2":"29","3":"22/07/2015","4":"TRUE","5":"16","6":"16","7":"1317018","8":"R","9":"E","10":"31","11":"F","12":"A","13":"R","14":"18","15":"2015","16":"7","17":"202","18":"I","19":""},{"1":"43","2":"58","3":"28/08/2015","4":"TRUE","5":"2","6":"44","7":"1316717","8":"N","9":"NA","10":"31","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"8","17":"239","18":"II","19":"MICROCHIP USCITO"},{"1":"12","2":"86","3":"30/08/2015","4":"TRUE","5":"6","6":"34","7":"1315467","8":"N","9":"NA","10":"30","11":"F","12":"A","13":"NR","14":"19","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"9","2":"64","3":"28/08/2015","4":"FALSE","5":"3","6":"31","7":"1312250","8":"R","9":"A/E","10":"30","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"9","2":"76","3":"29/08/2015","4":"FALSE","5":"5","6":"35","7":"1312250","8":"R","9":"A/E","10":"30","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"68","2":"132","3":"07/09/2015","4":"FALSE","5":"23","6":"9","7":"NA","8":"N","9":"NA","10":"30","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"9","17":"249","18":"II","19":""},{"1":"6","2":"67","3":"29/08/2015","4":"TRUE","5":"4","6":"16","7":"1313807","8":"R","9":"NA","10":"29","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"6","2":"79","3":"30/08/2015","4":"TRUE","5":"6","6":"19","7":"1313807","8":"R","9":"NA","10":"29","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"6","2":"121","3":"04/09/2015","4":"FALSE","5":"17","6":"18","7":"1313807","8":"R","9":"NA","10":"29","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"9","17":"246","18":"II","19":""},{"1":"9","2":"129","3":"06/09/2015","4":"FALSE","5":"21","6":"35","7":"1312250","8":"R","9":"A/E","10":"29","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"9","17":"248","18":"II","19":""},{"1":"65","2":"127","3":"06/09/2015","4":"FALSE","5":"21","6":"18","7":"NA","8":"N","9":"NA","10":"29","11":"M","12":"A","13":"NR","14":"NA","15":"2015","16":"9","17":"248","18":"II","19":""},{"1":"10","2":"75","3":"29/08/2015","4":"FALSE","5":"5","6":"40","7":"1315457","8":"R","9":"A/B","10":"28","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"12","2":"92","3":"31/08/2015","4":"TRUE","5":"8","6":"35","7":"1315467","8":"R","9":"NA","10":"28","11":"F","12":"A","13":"NR","14":"19","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"9","2":"84","3":"30/08/2015","4":"TRUE","5":"6","6":"28","7":"1312250","8":"R","9":"A/E","10":"28","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"9","2":"115","3":"03/09/2015","4":"TRUE","5":"14","6":"35","7":"1312250","8":"R","9":"A/E","10":"28","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"10","2":"95","3":"31/08/2015","4":"TRUE","5":"8","6":"60","7":"1315457","8":"R","9":"A/B","10":"27","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"7","2":"109","3":"03/09/2015","4":"TRUE","5":"14","6":"11","7":"1314797","8":"R","9":"NA","10":"27","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"7","2":"117","3":"03/09/2015","4":"TRUE","5":"14","6":"19","7":"1314797","8":"R","9":"NA","10":"27","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"245","18":"II","19":"ORE 12.00, SECONDO GIRO PER CONTROLLO"},{"1":"7","2":"120","3":"04/09/2015","4":"FALSE","5":"17","6":"14","7":"1314797","8":"R","9":"NA","10":"27","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"246","18":"II","19":""},{"1":"7","2":"133","3":"07/09/2015","4":"FALSE","5":"23","6":"12","7":"1314797","8":"R","9":"NA","10":"27","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"249","18":"II","19":""},{"1":"12","2":"114","3":"03/09/2015","4":"TRUE","5":"14","6":"33","7":"1315467","8":"R","9":"NA","10":"27","11":"F","12":"A","13":"NR","14":"19","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"9","2":"71","3":"29/08/2015","4":"TRUE","5":"4","6":"35","7":"1312250","8":"R","9":"A/E","10":"27","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"7","2":"61","3":"28/08/2015","4":"FALSE","5":"3","6":"12","7":"1314797","8":"R","9":"NA","10":"26","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"47","2":"70","3":"29/08/2015","4":"TRUE","5":"4","6":"43","7":"1312387","8":"N","9":"NA","10":"26","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"9","2":"105","3":"31/08/2015","4":"FALSE","5":"9","6":"31","7":"1312250","8":"R","9":"A/E","10":"26","11":"M","12":"A","13":"NR","14":"20","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"6","2":"108","3":"03/09/2015","4":"TRUE","5":"14","6":"8","7":"1313807","8":"R","9":"NA","10":"25","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"6","2":"116","3":"03/09/2015","4":"TRUE","5":"14","6":"46","7":"1313807","8":"R","9":"NA","10":"25","11":"F","12":"A","13":"R","14":"17","15":"2015","16":"9","17":"245","18":"II","19":"ORE 12.00, SECONDO GIRO PER CONTROLLO"},{"1":"7","2":"53","3":"28/08/2015","4":"TRUE","5":"2","6":"13","7":"1314797","8":"N","9":"NA","10":"25","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"7","2":"72","3":"29/08/2015","4":"FALSE","5":"5","6":"12","7":"1314797","8":"R","9":"NA","10":"25","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"50","2":"83","3":"30/08/2015","4":"TRUE","5":"6","6":"67","7":"1313222","8":"N","9":"NA","10":"25","11":"M","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"7","2":"126","3":"06/09/2015","4":"FALSE","5":"21","6":"14","7":"1314797","8":"R","9":"NA","10":"25","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"248","18":"II","19":""},{"1":"12","2":"130","3":"06/09/2015","4":"FALSE","5":"21","6":"34","7":"1315467","8":"R","9":"NA","10":"25","11":"F","12":"A","13":"NR","14":"19","15":"2015","16":"9","17":"248","18":"II","19":""},{"1":"7","2":"93","3":"31/08/2015","4":"TRUE","5":"8","6":"14","7":"1314797","8":"R","9":"NA","10":"24","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"7","2":"88","3":"30/08/2015","4":"FALSE","5":"7","6":"14","7":"1314797","8":"R","9":"NA","10":"23","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"7","2":"100","3":"31/08/2015","4":"FALSE","5":"9","6":"19","7":"1314797","8":"R","9":"NA","10":"23","11":"M","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"63","2":"123","3":"05/09/2015","4":"FALSE","5":"19","6":"15","7":"NA","8":"N","9":"NA","10":"23","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"247","18":"II","19":""},{"1":"48","2":"74","3":"29/08/2015","4":"FALSE","5":"5","6":"73","7":"NA","8":"N","9":"NA","10":"22","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"25","2":"23","3":"21/07/2015","4":"TRUE","5":"14","6":"33","7":"NA","8":"N","9":"A","10":"22","11":"NA","12":"G","13":"NR","14":"19","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"59","2":"111","3":"03/09/2015","4":"TRUE","5":"14","6":"72","7":"NA","8":"N","9":"NA","10":"22","11":"M","12":"G","13":"NR","14":"19","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"45","2":"62","3":"28/08/2015","4":"FALSE","5":"3","6":"58","7":"NA","8":"N","9":"NA","10":"21","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"10","2":"81","3":"30/08/2015","4":"TRUE","5":"6","6":"64","7":"1315457","8":"R","9":"A/B","10":"21","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"52","2":"97","3":"31/08/2015","4":"TRUE","5":"8","6":"68","7":"NA","8":"N","9":"NA","10":"21","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"58","2":"110","3":"03/09/2015","4":"TRUE","5":"14","6":"14","7":"NA","8":"N","9":"NA","10":"20","11":"F","12":"G","13":"NR","14":"16","15":"2015","16":"9","17":"245","18":"II","19":""},{"1":"54","2":"101","3":"31/08/2015","4":"FALSE","5":"9","6":"56","7":"NA","8":"N","9":"NA","10":"20","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"51","2":"89","3":"30/08/2015","4":"FALSE","5":"7","6":"70","7":"NA","8":"N","9":"NA","10":"20","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"32","2":"34","3":"22/07/2015","4":"FALSE","5":"17","6":"31","7":"NA","8":"N","9":"NA","10":"19","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"7","17":"202","18":"I","19":""},{"1":"49","2":"78","3":"30/08/2015","4":"TRUE","5":"6","6":"70","7":"NA","8":"N","9":"NA","10":"19","11":"M","12":"G","13":"NR","14":"19","15":"2015","16":"8","17":"241","18":"II","19":""},{"1":"66","2":"128","3":"06/09/2015","4":"FALSE","5":"21","6":"23","7":"NA","8":"N","9":"NA","10":"19","11":"NA","12":"G","13":"NR","14":"19","15":"2015","16":"9","17":"248","18":"II","19":""},{"1":"55","2":"102","3":"31/08/2015","4":"FALSE","5":"9","6":"72","7":"NA","8":"N","9":"NA","10":"19","11":"NA","12":"G","13":"NR","14":"78","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"67","2":"131","3":"07/09/2015","4":"FALSE","5":"23","6":"23","7":"NA","8":"N","9":"NA","10":"19","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"9","17":"249","18":"II","19":""},{"1":"30","2":"32","3":"22/07/2015","4":"FALSE","5":"17","6":"9","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"16","15":"2015","16":"7","17":"202","18":"I","19":""},{"1":"24","2":"20","3":"21/07/2015","4":"TRUE","5":"14","6":"13","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"37","2":"45","3":"24/07/2015","4":"TRUE","5":"20","6":"35","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"7","17":"204","18":"I","19":""},{"1":"46","2":"69","3":"29/08/2015","4":"TRUE","5":"4","6":"71","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"8","17":"240","18":"II","19":""},{"1":"16","2":"9","3":"18/07/2015","4":"TRUE","5":"8","6":"19","7":"NA","8":"N","9":"D","10":"18","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"7","17":"198","18":"I","19":""},{"1":"36","2":"43","3":"24/07/2015","4":"TRUE","5":"20","6":"26","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"7","17":"204","18":"I","19":""},{"1":"53","2":"98","3":"31/08/2015","4":"TRUE","5":"8","6":"74","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"61","2":"118","3":"03/09/2015","4":"TRUE","5":"14","6":"3","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"245","18":"II","19":"ORE 12.00, SECONDO GIRO PER CONTROLLO"},{"1":"64","2":"124","3":"05/09/2015","4":"FALSE","5":"19","6":"42","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"18","15":"2015","16":"9","17":"247","18":"II","19":""},{"1":"38","2":"46","3":"24/07/2015","4":"TRUE","5":"20","6":"31","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"20","15":"2015","16":"7","17":"204","18":"I","19":""},{"1":"41","2":"55","3":"28/08/2015","4":"TRUE","5":"2","6":"16","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"20","15":"2015","16":"8","17":"239","18":"II","19":""},{"1":"33","2":"37","3":"23/07/2015","4":"TRUE","5":"18","6":"14","7":"NA","8":"N","9":"NA","10":"18","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"7","17":"203","18":"I","19":""},{"1":"26","2":"24","3":"21/07/2015","4":"TRUE","5":"14","6":"29","7":"NA","8":"N","9":"NA","10":"17","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"62","2":"119","3":"04/09/2015","4":"FALSE","5":"17","6":"3","7":"NA","8":"N","9":"NA","10":"17","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"9","17":"246","18":"II","19":""},{"1":"20","2":"16","3":"20/07/2015","4":"TRUE","5":"12","6":"40","7":"NA","8":"N","9":"E","10":"16","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"7","17":"200","18":"I","19":""},{"1":"21","2":"17","3":"20/07/2015","4":"TRUE","5":"12","6":"39","7":"NA","8":"N","9":"NA","10":"14","11":"NA","12":"G","13":"NR","14":"17","15":"2015","16":"7","17":"200","18":"I","19":""},{"1":"8","2":"80","3":"30/08/2015","4":"TRUE","5":"6","6":"65","7":"1314106","8":"R","9":"NA","10":"NA","11":"M","12":"A","13":"R","14":"17","15":"2015","16":"8","17":"241","18":"II","19":"MORTO"},{"1":"10","2":"107","3":"31/08/2015","4":"FALSE","5":"9","6":"64","7":"1315457","8":"R","9":"A/B","10":"NA","11":"F","12":"A","13":"NR","14":"18","15":"2015","16":"8","17":"242","18":"II","19":"DIMENTICATO, TROVATO MORTO GIORNO DOPO"},{"1":"11","2":"103","3":"31/08/2015","4":"FALSE","5":"9","6":"65","7":"1313979","8":"R","9":"NA","10":"NA","11":"M","12":"A","13":"R","14":"19","15":"2015","16":"8","17":"242","18":"II","19":"MORTO"},{"1":"1","2":"7","3":"17/07/2015","4":"FALSE","5":"7","6":"66","7":"1313062","8":"R","9":"NA","10":"NA","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"197","18":"I","19":"TEMPORALE"},{"1":"1","2":"28","3":"21/07/2015","4":"FALSE","5":"15","6":"42","7":"1313062","8":"R","9":"NA","10":"NA","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"5","2":"94","3":"31/08/2015","4":"TRUE","5":"8","6":"55","7":"1315304","8":"R","9":"B","10":"NA","11":"M","12":"A","13":"R","14":"20","15":"2015","16":"8","17":"242","18":"II","19":"RIANIMATO"},{"1":"15","2":"8","3":"17/07/2015","4":"FALSE","5":"7","6":"61","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"7","17":"197","18":"I","19":"TEMPORALE"},{"1":"27","2":"25","3":"21/07/2015","4":"FALSE","5":"15","6":"13","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"28","2":"26","3":"21/07/2015","4":"FALSE","5":"15","6":"26","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"7","17":"201","18":"I","19":""},{"1":"29","2":"27","3":"21/07/2015","4":"FALSE","5":"15","6":"34","7":"NA","8":"R","9":"NA","10":"NA","11":"NA","12":"A","13":"NA","14":"NA","15":"2015","16":"7","17":"201","18":"I","19":"PELO MARCATO IN UNO O PIU PUNTI"},{"1":"44","2":"60","3":"28/08/2015","4":"TRUE","5":"2","6":"32","7":"NA","8":"NA","9":"NA","10":"NA","11":"M","12":"A","13":"R","14":"NA","15":"2015","16":"8","17":"239","18":"II","19":"MORTO PER ERMELLINO"},{"1":"56","2":"104","3":"31/08/2015","4":"FALSE","5":"9","6":"49","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"G","13":"NA","14":"NA","15":"2015","16":"8","17":"242","18":"II","19":"SCAPPATO"},{"1":"57","2":"106","3":"31/08/2015","4":"FALSE","5":"9","6":"15","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"8","17":"242","18":"II","19":""},{"1":"60","2":"113","3":"03/09/2015","4":"TRUE","5":"14","6":"60","7":"NA","8":"N","9":"NA","10":"NA","11":"NA","12":"G","13":"NR","14":"NA","15":"2015","16":"9","17":"245","18":"II","19":"RIANIMATO"}],"options":{"columns":{"min":{},"max":[10],"total":[19]},"rows":{"min":[10],"max":[10],"total":[133]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkdldHRpbmcgYSBmZWVsIGZvciBhbmQgbWFuYWdlIHlvdXIgZGF0YSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCkluIHRoaXMgZXhlcmNpc2UsIHdlIGZpcnN0IGxlYXJuIGhvdyB0byBnZXQgYSBmZWVsIG9mIG91ciBkYXRhLCBieSBsb29raW5nIGF0IHRoZSBzdHJ1Y3R1cmUgb2YgZGF0YXNldHMsIGFuZCB0aGVuIHdl4oCZcmUgZ29pbmcgdG8gZm9jdXMgb24gaG93IHRvIHVzZSB0aGUgYGRwbHlyYCBwYWNrYWdlLCBleHBsb3JpbmcgZnVuY3Rpb25zIGZvciBkYXRhIG1hbmFnZW1lbnQgYW5kIHRyYW5zZm9ybWF0aW9uLiANClRoZXNlIGV4ZXJjaXNlcyBhcmUgKHBhcnRseSkgZnJvbSBbRGF0YUNhbXBdKGh0dHBzOi8vd3d3LmRhdGFjYW1wLmNvbS9ob21lKSBhbmQgcGFydGx5IGluc3BpcmVkIGJ5IFtSIGZvciBEYXRhIFNjaWVuY2VdKGh0dHBzOi8vcjRkcy5oYWQuY28ubnovdHJhbnNmb3JtLmh0bWwpLg0KDQojIEhhdmUgYSBsb29rIGF0IHRoZSBzdHJ1Y3R1cmUgb2YgeW91ciBkYXRhDQoNClRoZSBmaXJzdCB0aGluZyB0byBkbyB3aGVuIHlvdSBnZXQgeW91ciBoYW5kcyBvbiBhIG5ldyBkYXRhc2V0IGlzIHRvICoqdW5kZXJzdGFuZCBpdHMgc3RydWN0dXJlKiouIFRoZXJlIGFyZSBzZXZlcmFsIHdheXMgdG8gZ28gYWJvdXQgdGhpcyBpbiBSLCBlYWNoIG9mIHdoaWNoIG1heSByZXZlYWwgZGlmZmVyZW50IGlzc3VlcyB3aXRoIHlvdXIgZGF0YSB0aGF0IHJlcXVpcmUgYXR0ZW50aW9uLg0KDQpJbiB0aGlzIGNvdXJzZSwgd2UgYXJlIG9ubHkgY29uY2VybmVkIHdpdGggZGF0YSB0aGF0IGNhbiBiZSBleHByZXNzZWQgaW4gdGFibGUgZm9ybWF0IChpLmUuIHR3byBkaW1lbnNpb25zLCByb3dzIGFuZCBjb2x1bW5zKS4gVGFibGVzIGluIFIgb2Z0ZW4gaGF2ZSB0aGUgdHlwZSBkYXRhLmZyYW1lLiBZb3UgY2FuIGNoZWNrIHRoZSBjbGFzcyBvZiBhbnkgb2JqZWN0IGluIFIgd2l0aCB0aGUgKmNsYXNzKCkqIGZ1bmN0aW9uLg0KDQpPbmNlIHlvdSBrbm93IHRoYXQgeW91IGFyZSBkZWFsaW5nIHdpdGggdGFidWxhciBkYXRhLCB5b3UgbWF5IGFsc28gd2FudCB0byBnZXQgYSBxdWljayBmZWVsIGZvciB0aGUgY29udGVudHMgb2YgeW91ciBkYXRhLiBCZWZvcmUgcHJpbnRpbmcgdGhlIGVudGlyZSBkYXRhc2V0IHRvIHRoZSBjb25zb2xlLCBpdCdzIHByb2JhYmx5IHdvcnRoIGtub3dpbmcgaG93IG1hbnkgcm93cyBhbmQgY29sdW1ucyB0aGVyZSBhcmUuIFRoZSAqZGltKCkqIGNvbW1hbmQgdGVsbHMgeW91IHRoaXMuDQoNCiMjIEluc3RydWN0aW9ucw0KDQpJIHByb3ZpZGVkIHlvdSBhIGRhdGFzZXQgY2FsbGVkICpjYXB0dXJlcy5jc3YqLiBUaGUgZGF0YSBwcm92aWRlIGluZm9ybWF0aW9uIG9uIHNub3cgdm9sZSBjYXB0dXJlcw0KDQoqIENoZWNrIHRoZSBjbGFzcyBvZiBjYXB0dXJlcw0KKiBGaW5kIHRoZSBkaW1lbnNpb25zIG9mIGNhcHR1cmVzDQoqIFByaW50IHRoZSBjYXB0dXJlcyBjb2x1bW4gbmFtZXMNCg0KYGBge3J9DQojIFJlYWQgY2FwdHVyZXMuY3N2IChuYW1lIGl0ICdjYXB0dXJlcycpDQpjYXB0dXJlcyA8LSByZWFkLmNzdigiZGF0YS9jYXB0dXJlcy5jc3YiLCBzZXA9IjsiKQ0KDQojIENoZWNrIHRoZSBjbGFzcyBvZiBjYXB0dXJlcw0KP2NsYXNzDQpjbGFzcyhjYXB0dXJlcykNCg0KIyBDaGVjayB0aGUgZGltZW5zaW9ucyBvZiBjYXB0dXJlcw0KP2RpbSgpDQpkaW0oY2FwdHVyZXMpDQoNCiMgVmlldyB0aGUgY29sdW1uIG5hbWVzIG9mIGNhcHR1cmVzDQo/bmFtZXMoKQ0KbmFtZXMoY2FwdHVyZXMpDQpgYGANCg0KDQojIFZpZXdpbmcgdGhlIHN0cnVjdHVyZSBvZiB5b3VyIGRhdGENCg0KU2luY2UgKmNhcHR1cmVzKiBkb2Vzbid0IGhhdmUgYSBodWdlIG51bWJlciBvZiBjb2x1bW5zLCB5b3UgY2FuIHZpZXcgYSBxdWljayBzbmFwc2hvdCBvZiB5b3VyIGRhdGEgdXNpbmcgdGhlICpzdHIoKSogKGZvciBzdHJ1Y3R1cmUpIGNvbW1hbmQuIEluIGFkZGl0aW9uIHRvIHRoZSBjbGFzcyBhbmQgZGltZW5zaW9ucyBvZiB5b3VyIGVudGlyZSBkYXRhc2V0LCAqc3RyKCkqIHdpbGwgdGVsbCB5b3UgdGhlIGNsYXNzIG9mIGVhY2ggdmFyaWFibGUgYW5kIGdpdmUgeW91IGEgcHJldmlldyBvZiBpdHMgY29udGVudHMuDQoNCllvdSBjYW4gdXNlIHRoZSAqc3VtbWFyeSgpKiBjb21tYW5kIHRvIGdldCBhIGJldHRlciBmZWVsIGZvciBob3cgeW91ciBkYXRhIGFyZSBkaXN0cmlidXRlZCwgd2hpY2ggbWF5IHJldmVhbCB1bnVzdWFsIG9yIGV4dHJlbWUgdmFsdWVzLCB1bmV4cGVjdGVkIG1pc3NpbmcgZGF0YSwgZXRjLiBGb3IgbnVtZXJpYyB2YXJpYWJsZXMsIHRoaXMgbWVhbnMgbG9va2luZyBhdCBtZWFucywgcXVhcnRpbGVzIChpbmNsdWRpbmcgdGhlIG1lZGlhbiksIGFuZCBleHRyZW1lIHZhbHVlcy4gRm9yIGNoYXJhY3RlciBvciBmYWN0b3IgdmFyaWFibGVzLCB5b3UgbWF5IGJlIGN1cmlvdXMgYWJvdXQgdGhlIG51bWJlciBvZiB0aW1lcyBlYWNoIHZhbHVlIGFwcGVhcnMgaW4gdGhlIGRhdGEgKGkuZS4gY291bnRzKSwgd2hpY2ggKnN1bW1hcnkoKSogYWxzbyByZXZlYWxzLg0KDQojIyBJbnN0cnVjdGlvbnMNCg0KKiBWaWV3IHRoZSBzdHJ1Y3R1cmUgb2YgKmNhcHR1cmVzKiB1c2luZyB0aGUgdHJhZGl0aW9uYWwgbWV0aG9kDQoqIExvb2sgYXQgYSAqc3VtbWFyeSgpKiBvZiAqY2FwdHVyZXMqDQoNCg0KYGBge3J9DQojIENoZWNrIHRoZSBzdHJ1Y3R1cmUgb2YgY2FwdHVyZXMNCnN0cihjYXB0dXJlcykNCg0KDQojIFZpZXcgYSBzdW1tYXJ5IG9mIGNhcHR1cmVzDQpzdW1tYXJ5KGNhcHR1cmVzKQ0KDQoNCmBgYA0KDQoNCiMgTG9va2luZyBhdCB5b3VyIGRhdGENCg0KWW91IGNhbiBsb29rIGF0IGFsbCB0aGUgc3VtbWFyaWVzIHlvdSB3YW50LCBidXQgYXQgdGhlIGVuZCBvZiB0aGUgZGF5LCB0aGVyZSBpcyBubyBzdWJzdGl0dXRlIGZvciBsb29raW5nIGF0IHlvdXIgZGF0YSAtLSBlaXRoZXIgaW4gcmF3IHRhYmxlIGZvcm0gb3IgYnkgcGxvdHRpbmcgaXQuDQoNClRoZSBtb3N0IGJhc2ljIHdheSB0byBsb29rIGF0IHlvdXIgZGF0YSBpbiBSIGlzIGJ5IHByaW50aW5nIGl0IHRvIHRoZSBjb25zb2xlLiBBcyB5b3UgbWF5IGtub3cgZnJvbSBleHBlcmllbmNlLCB0aGUgKnByaW50KCkqIGNvbW1hbmQgaXMgbm90IGV2ZW4gbmVjZXNzYXJ5OyB5b3UgY2FuIGp1c3QgdHlwZSB0aGUgbmFtZSBvZiB0aGUgb2JqZWN0LiBUaGUgZG93bnNpZGUgdG8gdGhpcyBvcHRpb24gaXMgdGhhdCBSIHdpbGwgYXR0ZW1wdCB0byBwcmludCB0aGUgZW50aXJlIGRhdGFzZXQsIHdoaWNoIGNhbiBiZSBhIG51aXNhbmNlIGlmIHRoZSBkYXRhc2V0IGlzIHRvbyBsYXJnZS4NCg0KT25lIHdheSBhcm91bmQgdGhpcyBpcyB0byB1c2UgdGhlICpoZWFkKCkqIGFuZCAqdGFpbCgpKiBjb21tYW5kcywgd2hpY2ggb25seSBkaXNwbGF5IHRoZSBmaXJzdCBhbmQgbGFzdCA2IHJvd3Mgb2YgZGF0YSwgcmVzcGVjdGl2ZWx5LiBZb3UgY2FuIHZpZXcgbW9yZSAob3IgZmV3ZXIpIHJvd3MgYnkgcHJvdmlkaW5nIGFzIGEgc2Vjb25kIGFyZ3VtZW50IHRvIHRoZSBmdW5jdGlvbiB0aGUgbnVtYmVyIG9mIHJvd3MgeW91IHdpc2ggdG8gdmlldy4gVGhlc2UgZnVuY3Rpb25zIHByb3ZpZGUgYSB1c2VmdWwgbWV0aG9kIGZvciBxdWlja2x5IGdldHRpbmcgYSBzZW5zZSBvZiB5b3VyIGRhdGEgd2l0aG91dCBvdmVybHkgY2x1dHRlcmluZyB0aGUgY29uc29sZS4NCg0KRmluYWxseSwgb25lIG9mIHRoZSBiZXN0IHdheXMgdG8gdW5kZXJzdGFuZCBkYXRhIGlzIHRvIHBsb3QgdGhlbS4NCkZvciB0aGUgbW9tZW50LCB3ZSB3aWxsIHVzZSB0aGUgZnVuY3Rpb25zICpoaXN0KCkqIGFuZCAqcGxvdCgpKiB0byBwcm9kdWNlIGFuIGhpc3RvZ3JhbSBvZiBvbmUgdmFyaWFibGUgaW4gdGhlIGRhdGFzZXQsIGFuZCB0byBwbG90IG9uZSB2YXJpYWJsZSBhZ2FpbnN0IGFub3RoZXIsIHJlc3BlY3RpdmVseS4NCg0KIyMgSW5zdHJ1Y3Rpb25zDQoNCiogUHJpbnQgdGhlIGZ1bGwgZGF0YXNldCB0byB0aGUgY29uc29sZSAoeW91IGRvbid0IG5lZWQgKnByaW50KCkqIHRvIGRvIHRoaXMpDQoqIFZpZXcgdGhlIGZpcnN0IDYgcm93cyBvZiBjYXB0dXJlcw0KKiBWaWV3IHRoZSBmaXJzdCAxNSByb3dzIG9mIGNhcHR1cmVzDQoqIFZpZXcgdGhlIGxhc3QgNiByb3dzIG9mIGNhcHR1cmVzDQoqIFZpZXcgdGhlIGxhc3QgMTAgcm93cyBvZiBjYXB0dXJlcw0KKiBQcm9kdWNlIGFuIGhpc3RvZ3JhbSBvZiB0aGUgd2VpZ2h0IG9mIHRoZSBhbmltYWxzICgqd2VpZ2h0X2cqKQ0KKiBQbG90ICpjYXB0dXJlX2lkKiAoYW4gaWRlbnRpZmljYXRpb24gbnVtYmVyIGZvciB0aGUgY2FwdHVyZSBldmVudHMpIGFnYWluc3QgdGhlIGRheSBvZiB0aGUgeWVhciAoKkRPWSopDQoNCg0KYGBge3J9DQojIFByaW50IGNhcHR1cmVzIHRvIHRoZSBjb25zb2xlDQoNCg0KIyBWaWV3IHRoZSBmaXJzdCA2IHJvd3MNCmhlYWQoY2FwdHVyZXMpDQoNCiMgVmlldyB0aGUgZmlyc3QgMTUgcm93cw0KaGVhZChjYXB0dXJlcywgbj0xNSkNCg0KIyBWaWV3IHRoZSBsYXN0IDYgcm93cw0KDQoNCiMgVmlldyB0aGUgbGFzdCAxMCByb3dzDQoNCg0KIyBQcm9kdWNlIGFuIGhpc3RvZ3JhbSBvZiB3ZWlnaHQNCg0KDQojIFBsb3QgdGhlIGNhcHR1cmUgSUQgbm8uIHRvd2FyZHMgdGhlIERPWQ0KDQoNCg0KYGBgDQoNCg0KIyBEYXRhIG1hbmlwdWxhdGlvbiAtIHRoZSBmb3VyIGZ1bmRhbWVudGFsIHZlcmJzDQoNCkRhdGEgbWFuaXB1bGF0aW9uIGluY2x1ZGVzIHZhcmlhYmxlLWJ5LXZhcmlhYmxlIHRyYW5zZm9ybWF0aW9uIChlLmcuIGxvZywgb3Igc3FydCksIGFzIHdlbGwgYXMgYWdncmVnYXRpb24sIGZpbHRlcmluZyBhbmQgcmVvcmRlcmluZy4NCg0KRm9yIGRhdGEgbWFuaXB1bGF0aW9uLCB3ZSBjYW4gdXNlIGZ1bmN0aW9uIGZyb20gdGhlICpiYXNlKiBwYWNrYWdlLCBidXQgaGVyZSB3ZSByYXRoZXIgZm9jdXMgb24gdGhlIGZ1bmN0aW9ucyBmcm9tIHRoZSBhZGRpdGlvbmFsICpkcGx5ciogcGFja2FnZS4NCg0KYGBge3J9DQojIGluc3RhbGwucGFja2FnZXMoImRwbHlyIikgIyBydW4gdGhpcyBsaW5lIG9ubHkgaWYgdGhlIHBhY2thZ2UgaXMgbm90IHlldCBpbnN0YWxsZWQNCmxpYnJhcnkoZHBseXIpICMgbG9hZCB0aGUgcGFja2FnZQ0KYGBgDQoNCg0KIyMgVHJhbnNmb3JtDQoNClRvIHRyYW5zZm9ybSBtZWFucyBhZGRpbmcgb3IgbW9kaWZ5aW5nIHZhcmlhYmxlcy4gVGhlc2UgbW9kaWZpY2F0aW9ucyBjYW4gaW52b2x2ZSBlaXRoZXIgYSBzaW5nbGUgdmFyaWFibGUgKGUuZy4gbG9nLXRyYW5zZm9ybWF0aW9uKSwgb3IgbXVsdGlwbGUgdmFyaWFibGVzIChlcy4gY29tcHV0aW5nIGRlbnNpdHkgZnJvbSB3ZWlnaHQgYW5kIHZvbHVtZSkuIFRoZSBmdW5jdGlvbiBgbXV0YXRlKClgIGluIHBhY2thZ2UgYGRwbHlyYCBjYW4gYmUgdXNlZCB0byBjYWxjdWxhdGUgbmV3IHZhcmlhYmxlcyBhbmQgdG8gYWRkIHRoZW0gYXQgdGhlIGVuZCBvZiB5b3VyIGRhdGFzZXQuDQoNCmBgYHtyfQ0KIyBUcmFuc2Zvcm0gdGhlIHdlaWdodCBvZiB0aGUgYW5pbWFscyB1c2luZyB0aGUgZnVuY3Rpb24gbG9nDQpsb2coY2FwdHVyZXMkd2VpZ2h0X2cpDQoNCiMgRGl2aWRlIHdlaWdodCBieSB0aGUgZm9vdCBsZW5ndGggYW5kIHNhdmUgdGhlIG5ldyB2YXJpYWJsZSBhcyB3ZnJhdGlvDQp3ZnJhdGlvIDwtIGNhcHR1cmVzJHdlaWdodF9nL2NhcHR1cmVzJGZvb3RsZW5ndGhfbW0NCmNhcHR1cmVzJHdlaWdodF9nL2NhcHR1cmVzJGZvb3RsZW5ndGhfbW0gLT4gd2ZyYXRpbw0KDQojIGFkZCB0aGUgY29sdW1uIHdmcmF0aW8gdG8gdGhlIGNhcHR1cmVzIGRhdGEgZnJhbWUsIGNyZWF0aW5nIGEgbmV3IGRhdGEgZnJhbWUgY2FsbGVkIGNhcHR1cmVzLm5ldw0KY2FwdHVyZXMubmV3IDwtIGNiaW5kKGNhcHR1cmVzLCB3ZnJhdGlvKSAjIHVzaW5nIFIgYmFzZSBmdW5jdGlvbiBgY2JpbmRgDQpjYXB0dXJlcyAlPiUgDQogIG11dGF0ZSh3ZnJhdGlvID0gd2VpZ2h0X2cvZm9vdGxlbmd0aF9tbSkgLT4gY2FwdHVyZXMubmV3DQpoZWFkKGNhcHR1cmVzLm5ldykNCmBgYA0KDQpgYGB7cn0NCiMgcmVtb3ZlIHRoZSBkYXRhIGZyYW1lIGNhcHR1cmVzLm5ldyBmcm9tIHRoZSB3b3JraW5nIGVudmlyb25tZW50DQpybShjYXB0dXJlcy5uZXcpDQoNCiMgbm93IGFkZCBib3RoIHRoZSBsb2cgb2YgdGhlIHdlaWdodCBhbmQgdGhlIGNvbHVtbiB3ZnJhdGlvIHRvIHRoZSBjYXB0dXJlcyBkYXRhIGZyYW1lLCBjcmVhdGluZyBhZ2FpbiBuZXcgZGF0YSBmcmFtZSBjYWxsZWQgY2FwdHVyZXMubmV3DQpjYXB0dXJlcyAlPiUgDQogIG11dGF0ZShsb2d3ID0gbG9nKHdlaWdodF9nKSwNCiAgICAgICAgIHdmcmF0aW8gPSB3ZWlnaHRfZy9mb290bGVuZ3RoX21tKSAtPiBjYXB0dXJlcy5uZXcNCmhlYWQoY2FwdHVyZXMubmV3KQ0KYGBgDQoNCg0KYGBge3J9DQojIERPIElUIE9OIFlPVVIgT1dOIC0gQUREIEFOT1RIRVIgVkFSSUFCTEUgVE8gVEhFIERBVEEgRlJBTUUsIEUuRy4gWUVBUiArIDENCg0KYGBgDQoNCg0KIyMgRmlsdGVyDQoNCkl0IGlzIG9mdGVuIHVzZWZ1bCB0byBzdWJzZXQgb3IgcmVtb3ZlIG9ic2VydmF0aW9ucyBiYXNlZCBvbiBzb21lIGNvbmRpdGlvbi4NCg0KYGBge3J9DQo/ZmlsdGVyIA0KDQojIGZpbHRlciBkYXRhIHNlbGVjdGluZyBvbmx5IHdlaWdodHMgPCAyNQ0KZmlsdGVyKGNhcHR1cmVzLCB3ZWlnaHRfZyA9PSAyNSkNCg0KIyBmaWx0ZXIgZGF0YSBzZWxlY3Rpbmcgb25seSB3ZWlnaHRzIDwgMjUNCmZpbHRlcihjYXB0dXJlcywgd2VpZ2h0X2cgPCAyNSkNCg0KIyBmaWx0ZXIgZGF0YSBzZWxlY3Rpbmcgb25seSB3ZWlnaHRzIDwgMjUgb3IgPiA0MA0KZmlsdGVyKGNhcHR1cmVzLCB3ZWlnaHRfZyA8IDI1IHwgd2VpZ2h0X2cgPiA0MCkNCg0KIyBmaWx0ZXIgZGF0YSBzZWxlY3Rpbmcgb25seSB3ZWlnaHRzID4gNDAgYW5kIGZvb3QgbGVuZ3RoID4gMTgNCmZpbHRlcihjYXB0dXJlcywgZm9vdGxlbmd0aF9tbSA+IDE4ICYgd2VpZ2h0X2cgPiA0MCkNCmBgYA0KDQpEbyB0aGUgc2FtZSB1c2luZyB0aGUgcGlwZSBvcGVyYXRvciAoY29tcGxldGUgdGhlIGV4ZXJjaXNlIG9uIHRoZSBiYXNpcyBvZiB0aGUgZmlyc3QgZXhhbXBsZSk6DQoNCmBgYHtyfQ0KIyBmaWx0ZXIgZGF0YSBzZWxlY3Rpbmcgb25seSB3ZWlnaHRzIDwgMjUNCmNhcHR1cmVzICU+JSANCiAgZmlsdGVyKHdlaWdodF9nID09IDI1KQ0KDQojIGZpbHRlciBkYXRhIHNlbGVjdGluZyBvbmx5IHdlaWdodHMgPCAyNQ0KDQoNCiMgZmlsdGVyIGRhdGEgc2VsZWN0aW5nIG9ubHkgd2VpZ2h0cyA8IDI1IG9yID4gNDANCg0KDQojIGZpbHRlciBkYXRhIHNlbGVjdGluZyBvbmx5IHdlaWdodHMgPiA0MCBhbmQgZm9vdCBsZW5ndGggPiAxOA0KDQpgYGANCg0KDQoNCmBgYHtyfQ0KIyBETyBJVCBPTiBZT1VSIE9XTiAtIFNFTEVDVCBPTkxZIENBUFRVUkVTIFJFQ09SREVEIEFGVEVSIERPWSAyMTANCg0KDQojIFNFTEVDVCBPTkxZIENBUFRVUkVTIFJFQ09SREVEIElOIEpVTFkNCg0KYGBgDQoNCg0KIyMgU2VsZWN0DQoNCmBzZWxlY3QoKWAgYWxsb3dzIHlvdSB0byByYXBpZGx5IHpvb20gaW4gb24gYSB1c2VmdWwgc3Vic2V0IHVzaW5nIG9wZXJhdGlvbnMgYmFzZWQgb24gdGhlIG5hbWVzIG9mIHRoZSB2YXJpYWJsZXMuDQoNCmBgYHtyfQ0KIyBzZWxlY3QgY29sdW1ucyBieSBuYW1lDQpjYXB0dXJlcyAlPiUgDQogIHNlbGVjdCh3ZWlnaHRfZywgc2V4LCBhZ2UsIGZvb3RsZW5ndGhfbW0pDQoNCiMgc2VsZWN0IGFsbCBjb2x1bW5zIGJldHdlZW4gd2VpZ2h0IGFuZCBhZ2UNCmNhcHR1cmVzICU+JSANCiAgc2VsZWN0KHdlaWdodF9nOmFnZSkNCg0KIyBzZWxlY3QgYWxsIGNvbHVtbnMgZXhjZXB0IGRhd24NCmNhcHR1cmVzICU+JSANCiAgc2VsZWN0KC0oZGF3bikpDQoNCiMgc2VsZWN0IGFsbCBjb2x1bW5zIGV4Y2VwdCB0aG9zZSBmcm9tIGFuaW1hbF9pZCB0byBmdXJtYXJrDQpjYXB0dXJlcyAlPiUgDQogIHNlbGVjdCgtKGFuaW1hbF9pZDpmdXJtYXJrKSkNCg0KIyBzZWxlY3QgY29sdW1ucyBmcm9tIHdlaWdodF9nIHRvIGZvb3RsZW5naHRfbW0sIGV4Y2x1ZGluZyByZXByb2R1Y3RpdmUgc3RhdHVzDQpjYXB0dXJlcyAlPiUgDQogIHNlbGVjdCh3ZWlnaHRfZzpmb290bGVuZ3RoX21tKSAlPiUgDQogZHBseXI6OiBzZWxlY3QoLXJlcHJfc3RhdHVzKQ0KDQpgYGANCg0KUGxlYXNlIG5vdGU6IGBmaWx0ZXIoKWAgYW5kIGBzZWxlY3QoKWAgYXJlIHRoZSBgZHBseXJgIGFsdGVybmF0aXZlIHRvIHRoZSBgc3Vic2V0KClgIGJhc2UgZnVuY3Rpb24sIGFuZCB0aGV5IGFyZSBlYXNpZXIgdG8gdXNlIQ0KDQojIyBBZ2dyZWdhdGUgYW5kIHByb2R1Y2UgZ3JvdXBlZCBzdW1tYXJpZXMNCg0KV2hlbiB3ZSBhZ2dyZWdhdGUgZGF0YSwgd2UgY29sbGFwc2UgbXVsdGlwbGUgdmFsdWVzIGludG8gYSBzaW5nbGUgdmFsdWUgKGUuZy4gYnkgc3VtbWluZyBvciB0YWtpbmcgbWVhbnMpLiAgIA0KRm9yIHRoaXMgcHVycG9zZSwgaW4gYGRwbHlyYCB3ZSBjb3VwbGUgdHdvIGZ1bmN0aW9ucywgYHN1bW1hcmlzZSgpYCBhbmQgYGdyb3VwX2J5YA0KDQpgYGB7cn0NCmNhcHR1cmVzICU+JSANCiAgZ3JvdXBfYnkoc2V4KSAlPiUgDQogIHN1bW1hcmlzZShtZWFuKHdlaWdodF9nLCBuYS5ybT1UUlVFKSkNCmBgYA0KDQpgYGB7cn0NCiMgRE8gSVQgT04gWU9VUiBPV04gLSBDQUxDVUxBVEUgVEhFIE1FQU4gVEFLSU5HIElOVE8gQUNDT1VOVCBUSEUgQUdFIENMQVNTDQpjYXB0dXJlcyU+JQ0KICBncm91cF9ieShhZ2UpICU+JQ0KICBzdW1tYXJpc2UobWVhbih3ZWlnaHRfZywgbmEucm09VFJVRSkpDQoNCmBgYA0KDQpXaGF0IGlmIHdlIHdhbnQgdG8gdGFrZSBpbnRvIGFjY291bnQgYm90aCBzZXggYW5kIGFnZT8NCg0KYGBge3J9DQpjYXB0dXJlcyAlPiUNCiAgZ3JvdXBfYnkoYWdlLCBzZXgpICU+JSANCiAgc3VtbWFyaXNlKG1lYW4od2VpZ2h0X2csIG5hLnJtPVRSVUUpKQ0KYGBgDQoNClVzaW5nICpkcGx5ciogdGhlIGNvZGUgaXMgZWFzeSB0byBpbnRlcnByZXQgYW5kIHdlIGNhbiBhbHNvIGVhc2lseSBhZGQgb3RoZXIgc3VtbWFyeSBzdGF0aXN0aWNzLCBlLmcuOg0KDQpgYGB7cn0NCmNhcHR1cmVzICU+JQ0KICBncm91cF9ieShhZ2UsIHNleCkgJT4lIA0KICBzdW1tYXJpc2UobXcgPSBtZWFuKHdlaWdodF9nLCBuYS5ybT1UUlVFKSwgbWYgPSBtZWFuKGZvb3RsZW5ndGhfbW0sIG5hLnJtPVRSVUUpKQ0KYGBgDQoNClBsZWFzZSBub3RlIHRoYXQgZ3JvdXBpbmcgYWZmZWN0cyBhbG1vc3QgYWxsIGZvbGxvd2luZyBmdW5jdGlvbnMsIHNvIGl0IGlzIHNvbWV0aW1lcyBuZWNlc3NhcnkgdG8gcmVtb3ZlIHRoZSBncm91cGluZyBvZiBhIGRhdGFzZXQgdG8gY29udGludWUgd2l0aCB0aGUgYW5hbHlzZXMuIFlvdSBjYW4gZG8gdGhhdCB3aXRoIHRoZSBgdW5ncm91cCgpYCBmdW5jdGlvbjoNCg0KYGBge3J9DQpjYXB0dXJlcyAlPiUgDQogIGdyb3VwX2J5KHNleCkgJT4lIA0KICBzdW1tYXJpc2UobWVhbih3ZWlnaHRfZywgbmEucm09VFJVRSkpIC0+IGdyb3VwZWQuY2FwdHVyZXMNCnVuZ3JvdXAoZ3JvdXBlZC5jYXB0dXJlcykNCg0KIyBvcjoNCmNhcHR1cmVzICU+JSANCiAgZ3JvdXBfYnkoc2V4KSAlPiUgDQogIHN1bW1hcmlzZShtZWFuKHdlaWdodF9nLCBuYS5ybT1UUlVFKSkgJT4lIA0KICB1bmdyb3VwKCkNCg0KYGBgDQoNCg0KIyMgU29ydCwgb3JkZXIgYW5kIGFycmFuZ2UNCg0KSW4gdGhpcyBjYXNlLCB3ZSBkbyBub3QgY29tcHV0ZSBuZXcgdmFyaWFibGVzLCB3ZSBqdXN0IGNoYW5nZSB0aGUgb3JkZXIgb2YgdGhlIG9ic2VydmF0aW9ucw0KDQpgYGB7cn0NCiMgc29ydCB0aGUgd2VpZ3RoIG9mIHRoZSBhbmltYWxzDQpzb3J0KGNhcHR1cmVzJHdlaWdodF9nKQ0KYGBgDQoNCmBgYHtyfQ0Kc29ydChjYXB0dXJlcyR3ZWlnaHRfZywgZGVjcmVhc2luZyA9IFRSVUUpDQpgYGANCg0KT3JkZXJpbmcgdGhlIHdob2xlIGRhdGEgZnJhbWUgd2l0aCB0aGUgKmJhc2UqIHBhY2thZ2UgaXMgYSBsaXR0bGUgYml0IHRyaWNreSAoc2VlICo/b3JkZXIqIGZvciBleGFtcGxlcyksIHdoaWxlIGl0J3MgZWFzeSB3aXRoICpkcGx5cioNCg0KYGBge3J9DQpjYXB0dXJlcyAlPiUNCiAgYXJyYW5nZSh3ZWlnaHRfZykNCmBgYA0KDQpgYGB7cn0NCmNhcHR1cmVzICU+JQ0KICBhcnJhbmdlKGRlc2Mod2VpZ2h0X2cpKQ0KYGBgDQoNCmBgYHtyfQ0KIyBETyBJVCBPTiBZT1VSIE9XTiAtIEFSUkFOR0UgVEhFIERBVEEgRlJBTUUgQUNDT1JESU5HIFRPIEZPT1QgTEVHVEgsIEJPVEggSU4gQVNDRU5ESU5HIEFORCBERVNDRU5ESU5HIE9SREVSDQoNCg0KYGBgDQoNClNlZSAqP2FycmFuZ2UqIHRvIG9yZGVyIHRha2luZyBpbnRvIGFjY291bnQgZ3JvdXBpbmcgKHNlZSBleGFtcGxlIGF0IHRoZSBib3R0b20gb2YgdGhlIGhlbHAgZmlsZSkNCg0KYGBge3J9DQojIERPIElUIE9OIFlPVVIgT1dODQo/YXJyYW5nZQ0KDQoNCmBgYA0KDQoNCmBgYHtyfQ0KIyBvcmRlciBhY2NvcmRpbmcgdG8gd2VpZ2h0IGFuZCB0aGVuIHRvIGZvb3RsZW5naHQNCmNhcHR1cmVzICU+JQ0KICBhcnJhbmdlKGRlc2Mod2VpZ2h0X2cpLCBmb290bGVuZ3RoX21tKQ0KYGBgDQoNCg==</div>
 
 
 
@@ -1867,7 +2287,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("10-SLR-exercises.Rmd");
+  window.initializeSourceEmbed("IntroductionToR-dplyr.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
